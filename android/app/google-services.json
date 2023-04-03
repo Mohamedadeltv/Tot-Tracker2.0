@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "687070457802",
+    "project_id": "tottracker-238bb",
+    "storage_bucket": "tottracker-238bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687070457802:android:deca24120fddedc2da2933",
+        "android_client_info": {
+          "package_name": "com.example.tottracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687070457802-0losvbpitqujjjvopj3qvek1s4870mcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0sbpOvoRNPReM4mHE8af1PSZ_8FzLvxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687070457802-0losvbpitqujjjvopj3qvek1s4870mcu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
