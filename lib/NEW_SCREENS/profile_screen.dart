@@ -55,16 +55,24 @@ class ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(
-                        height: 30.0,
+                        height: 20.0,
                       ),
                       Stack(children: [
                         CircleAvatar(
                           backgroundColor: Colors.amberAccent,
-                          minRadius: 65.0,
+                          minRadius: 75.0,
                           child: CircleAvatar(
-                            radius: 60.0,
+                            radius: 71.0,
                             backgroundImage: AssetImage(
                                 'assets/drawables/istockphoto-1179420343-612x612.jpg'),
+                            //imageXFile == null
+                            //     ?
+                            //     NetworkImage(
+                            //         image!
+                            //     )
+                            //     :
+                            //     Image.file
+                            //         (imageXFile!).image,
                           ),
                         ),
                         Positioned(
@@ -80,7 +88,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                               child: const Icon(
                                 Icons.edit,
                                 color: Colors.black,
-                                size: 25,
+                                size: 20,
                               ),
                             ))
                       ]),
@@ -90,73 +98,210 @@ class ProfileScreenState extends State<ProfileScreen> {
                       Form(
                           child: Column(
                         children: [
-                          TextFormField(
-                            initialValue: userData.name ?? '',
-                            decoration: InputDecoration(
-                                label: Text(
-                                  'Name : ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22),
+                          Stack(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 2),
+                                  borderRadius: BorderRadius.circular(60),
+                                  color: Colors.white,
                                 ),
-                                prefixIcon: Icon(
-                                    size: 30,
-                                    Icons.person,
-                                    color: Color(0xff9a3a51))),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          TextFormField(
-                            initialValue: userData.email ?? '',
-                            decoration: InputDecoration(
-                                label: Text(
-                                  'Email : ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22),
+                                child: TextFormField(
+                                  initialValue: userData.name ?? '',
+                                  decoration: InputDecoration(
+                                    label: Text(
+                                      'Name : ',
+                                    ),
+                                    prefixIcon: Icon(Icons.person,
+                                        color: Color(0xff9a3a51)),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(
+                                        left: 15,
+                                        bottom: 15,
+                                        top: 15,
+                                        right: 15),
+                                  ),
                                 ),
-                                prefixIcon: Icon(
-                                  size: 30,
-                                  Icons.email,
-                                  color: Color(0xff1c69a2),
-                                )),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          TextFormField(
-                            initialValue: userData.gender ?? '',
-                            decoration: InputDecoration(
-                                label: Text(
-                                  'Gender : ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22),
-                                ),
-                                prefixIcon: Icon(
-                                    size: 30,
-                                    Icons.male,
-                                    color: Color(0xff9a3a51))),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          TextFormField(
-                            initialValue: userData.country ?? '',
-                            decoration: InputDecoration(
-                              label: Text(
-                                'Country : ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 22),
-                              ),
-                              prefixIcon: Icon(
-                                size: 30,
-                                Icons.countertops,
-                                color: Color(0xff1c69a2),
                               ),
                             ),
+                            Positioned(
+                                bottom: 35,
+                                right: 50,
+                                child: Container(
+                                  height: 35,
+                                  width: 35,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.white,
+                                  ),
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.black38,
+                                    size: 20,
+                                  ),
+                                )),
+                          ]),
+                          const SizedBox(
+                            height: 5.0,
                           ),
+                          Stack(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 2),
+                                  borderRadius: BorderRadius.circular(60),
+                                  color: Colors.white,
+                                ),
+                                child: TextFormField(
+                                  initialValue: userData.email ?? '',
+                                  decoration: InputDecoration(
+                                    label: Text(
+                                      'Email : ',
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.email,
+                                      color: Color(0xff1c69a2),
+                                    ),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(
+                                        left: 15,
+                                        bottom: 15,
+                                        top: 15,
+                                        right: 15),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 35,
+                                right: 50,
+                                child: Container(
+                                  height: 35,
+                                  width: 35,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.white,
+                                  ),
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.black38,
+                                    size: 20,
+                                  ),
+                                )),
+                          ]),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          Stack(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 2),
+                                  borderRadius: BorderRadius.circular(60),
+                                  color: Colors.white,
+                                ),
+                                child: TextFormField(
+                                  initialValue: userData.gender ?? '',
+                                  decoration: InputDecoration(
+                                    label: Text(
+                                      'Gender : ',
+                                    ),
+                                    prefixIcon: Icon(Icons.male,
+                                        color: Color(0xff9a3a51)),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(
+                                        left: 15,
+                                        bottom: 15,
+                                        top: 15,
+                                        right: 15),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 35,
+                                right: 50,
+                                child: Container(
+                                  height: 35,
+                                  width: 35,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.white,
+                                  ),
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.black38,
+                                    size: 20,
+                                  ),
+                                )),
+                          ]),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          Stack(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(60),
+                                  border: Border.all(width: 2),
+                                  color: Colors.white,
+                                ),
+                                child: TextFormField(
+                                  initialValue: userData.country ?? '',
+                                  decoration: InputDecoration(
+                                    label: Text(
+                                      'Country : ',
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.countertops,
+                                      color: Color(0xff1c69a2),
+                                    ),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(
+                                        left: 15,
+                                        bottom: 15,
+                                        top: 15,
+                                        right: 15),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 35,
+                                right: 50,
+                                child: Container(
+                                  height: 35,
+                                  width: 35,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.white),
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.black38,
+                                    size: 20,
+                                  ),
+                                )),
+                          ]),
                           const SizedBox(
                             height: 5.0,
                           ),

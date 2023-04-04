@@ -316,9 +316,9 @@ class _signupState extends State<signup> {
                                 color: Color(0xff9a3a51),
                               ),
                               Text(
-                                'Please select your gender ',
+                                '   Please select your gender ',
                                 style: const TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: Colors.black54,
                                 ),
                               ),
@@ -335,7 +335,7 @@ class _signupState extends State<signup> {
                             13,
                           ),
                           child: Icon(Icons.arrow_drop_down,
-                              size: 18, color: Colors.grey),
+                              size: 25, color: Color.fromARGB(255, 90, 90, 90)),
                         ),
                         isExpanded: true,
                         items: [
@@ -375,9 +375,9 @@ class _signupState extends State<signup> {
                                 color: Color(0xff1c69a2),
                               ),
                               Text(
-                                'Please select your country ',
+                                '   Please select your country ',
                                 style: const TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: Colors.black54,
                                 ),
                               ),
@@ -394,7 +394,7 @@ class _signupState extends State<signup> {
                             13,
                           ),
                           child: Icon(Icons.arrow_drop_down,
-                              size: 18, color: Colors.grey),
+                              size: 25, color: Color.fromARGB(255, 90, 90, 90)),
                         ),
                         isExpanded: true,
                         items: [
