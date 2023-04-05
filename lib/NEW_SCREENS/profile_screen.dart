@@ -1,12 +1,14 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/providers/profile_controller.dart';
 import '../providers/user.dart' as U;
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,9 +17,142 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
+  late ImageProvider imageProvider;
+  PickedFile? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+  Future<void> requestPermissionsForCamera() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+    ].request();
+    print(statuses[Permission.camera]);
+  }
+
+  Future<void> requestPermissionsForStorage() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.storage,
+    ].request();
+    print(statuses[Permission.storage]);
+  }
+
+  Future<String> uploadImageToFirebaseStorage(PickedFile imageFile) async {
+    final user = FirebaseAuth.instance.currentUser;
+    String fileName = DateTime.now().toString();
+    Reference reference = FirebaseStorage.instance
+        .ref()
+        .child('profile_images/${user?.email}/$fileName');
+    try {
+      // Upload the image to Firebase Storage
+      UploadTask uploadTask = reference.putFile(File(imageFile.path));
+      TaskSnapshot storageTaskSnapshot = await uploadTask;
+      // Get the download URL for the image
+      String downloadURL = await storageTaskSnapshot.ref.getDownloadURL();
+
+      // Update the user's profile picture URL in Firestore
+
+      print('HHHHHHHHHHHHHHHHHH  ' + user!.uid);
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: user.email)
+          .get()
+          .then((querySnapshot) {
+            querySnapshot.docs.forEach((documentSnapshot) {
+              documentSnapshot.reference.set(
+                  {'profile_picture_url': downloadURL},
+                  SetOptions(merge: true));
+            });
+          })
+          .then((value) => print('Profile picture updated successfully'))
+          .catchError(
+              (error) => print('Failed to update profile picture: $error'));
+
+      return downloadURL;
+    } catch (error) {
+      print(error);
+      throw error;
+    }
+  }
+
+  Widget bottomsheet() {
+    return Container(
+      height: 100.0,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 20,
+      ),
+      child: Column(children: <Widget>[
+        Text(
+          "Change Profile Picture",
+          style: TextStyle(fontSize: 20),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            OutlinedButton.icon(
+              onPressed: () {
+                takePhoto(ImageSource.camera);
+                requestPermissionsForCamera();
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.camera),
+              label: Text('Take a photo'),
+            ),
+            OutlinedButton.icon(
+              onPressed: () {
+                takePhoto(ImageSource.gallery);
+                requestPermissionsForStorage();
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.image),
+              label: Text('Gallery'),
+            ),
+          ],
+        )
+      ]),
+    );
+  }
+
+  Future<void> takePhoto(ImageSource source) async {
+    final pickedFile = await _picker.getImage(source: source);
+    setState(() {
+      _imageFile = pickedFile!;
+    });
+    if (_imageFile != null) {
+      uploadImageToFirebaseStorage(_imageFile!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ProfileController());
+    // Assuming that you have a reference to the Firestore document containing the image URL
+    final user = FirebaseAuth.instance.currentUser;
+
+    FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: user!.email)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.size > 0) {
+        // Assuming that the image URL is stored in a field called "profile_picture_url"
+        String imageUrl = querySnapshot.docs[0].get('profile_picture_url');
+
+        // Use the retrieved image URL to display the image
+        imageProvider = NetworkImage(imageUrl);
+      } else {
+        // If no documents match the query, display a placeholder image
+        imageProvider = AssetImage(
+            'assets/drawables/blank-profile-picture-973460_1280.webp');
+      }
+    }).catchError((error) {
+      // If an error occurs, display a placeholder image
+      imageProvider =
+          AssetImage('assets/drawables/blank-profile-picture-973460_1280.webp');
+    });
+
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -62,18 +197,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                           backgroundColor: Colors.amberAccent,
                           minRadius: 75.0,
                           child: CircleAvatar(
-                            radius: 71.0,
-                            backgroundImage: AssetImage(
-                                'assets/drawables/istockphoto-1179420343-612x612.jpg'),
-                            //imageXFile == null
-                            //     ?
-                            //     NetworkImage(
-                            //         image!
-                            //     )
-                            //     :
-                            //     Image.file
-                            //         (imageXFile!).image,
-                          ),
+                              radius: 71.0, backgroundImage: imageProvider),
                         ),
                         Positioned(
                             bottom: 0,
@@ -85,10 +209,17 @@ class ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius: BorderRadius.circular(100),
                                 color: Colors.amberAccent,
                               ),
-                              child: const Icon(
-                                Icons.edit,
-                                color: Colors.black,
-                                size: 20,
+                              child: InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (builder) => bottomsheet());
+                                },
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
                               ),
                             ))
                       ]),
