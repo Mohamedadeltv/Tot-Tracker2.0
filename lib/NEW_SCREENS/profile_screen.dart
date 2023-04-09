@@ -183,312 +183,320 @@ class ProfileScreenState extends State<ProfileScreen> {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: FutureBuilder(
-            future: controller.getUserData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  print("yessssssss");
-                  U.User userData = snapshot.data as U.User;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      Stack(children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.amberAccent,
-                          minRadius: 75.0,
-                          child: CircleAvatar(
-                              radius: 71.0, backgroundImage: imageProvider),
+      body: WillPopScope(
+      onWillPop: () async {
+        // Navigate back to the previous page
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        return false;
+      },
+        child: SingleChildScrollView(
+          child: Container(
+            child: FutureBuilder(
+              future: controller.getUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    print("yessssssss");
+                    U.User userData = snapshot.data as U.User;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 20.0,
                         ),
-                        Positioned(
-                            bottom: 0,
-                            right: 140,
-                            child: Container(
-                              height: 35,
-                              width: 35,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: Colors.amberAccent,
-                              ),
-                              child: PopupMenuButton(
-                                onSelected: (FilterOptions selectedValue) {
-                                  if (selectedValue ==
-                                      FilterOptions.Favorites) {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        builder: (builder) => bottomsheet());
-                                  } else {
-                                    imageProvider = AssetImage(
-                                        'assets/drawables/blank-profile-picture-973460_1280.webp');
-                                    FirebaseFirestore.instance
-                                        .collection('Users')
-                                        .where('email', isEqualTo: user!.email)
-                                        .get()
-                                        .then((querySnapshot) {
-                                      querySnapshot.docs.forEach((doc) {
-                                        setState(() {
-                                          doc.reference.update({
-                                            'profile_picture_url':
-                                                FieldValue.delete()
+                        Stack(children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.amberAccent,
+                            minRadius: 75.0,
+                            child: CircleAvatar(
+                                radius: 71.0, backgroundImage: imageProvider),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              right: 140,
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: Colors.amberAccent,
+                                ),
+                                child: PopupMenuButton(
+                                  onSelected: (FilterOptions selectedValue) {
+                                    if (selectedValue ==
+                                        FilterOptions.Favorites) {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (builder) => bottomsheet());
+                                    } else {
+                                      imageProvider = AssetImage(
+                                          'assets/drawables/blank-profile-picture-973460_1280.webp');
+                                      FirebaseFirestore.instance
+                                          .collection('Users')
+                                          .where('email', isEqualTo: user!.email)
+                                          .get()
+                                          .then((querySnapshot) {
+                                        querySnapshot.docs.forEach((doc) {
+                                          setState(() {
+                                            doc.reference.update({
+                                              'profile_picture_url':
+                                                  FieldValue.delete()
+                                            });
                                           });
                                         });
                                       });
-                                    });
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                  size: 20,
-                                ),
-                                itemBuilder: (_) => [
-                                  PopupMenuItem(
-                                    child: Text('Edit profile Picture'),
-                                    value: FilterOptions.Favorites,
-                                  ),
-                                  PopupMenuItem(
-                                    child: Text('Remove Profile Picture'),
-                                    value: FilterOptions.All,
-                                  ),
-                                ],
-                              ),
-                            ))
-                      ]),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      Form(
-                          child: Column(
-                        children: [
-                          Stack(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: 2),
-                                  borderRadius: BorderRadius.circular(60),
-                                  color: Colors.white,
-                                ),
-                                child: TextFormField(
-                                  initialValue: userData.name ?? '',
-                                  decoration: InputDecoration(
-                                    label: Text(
-                                      'Name : ',
-                                    ),
-                                    prefixIcon: Icon(Icons.person,
-                                        color: Color(0xff9a3a51)),
-                                    border: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 15,
-                                        bottom: 15,
-                                        top: 15,
-                                        right: 15),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                                bottom: 35,
-                                right: 50,
-                                child: Container(
-                                  height: 35,
-                                  width: 35,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white,
-                                  ),
-                                  child: const Icon(
+                                    }
+                                  },
+                                  icon: const Icon(
                                     Icons.edit,
-                                    color: Colors.black38,
+                                    color: Colors.black,
                                     size: 20,
                                   ),
-                                )),
-                          ]),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          Stack(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: 2),
-                                  borderRadius: BorderRadius.circular(60),
-                                  color: Colors.white,
-                                ),
-                                child: TextFormField(
-                                  initialValue: userData.email ?? '',
-                                  decoration: InputDecoration(
-                                    label: Text(
-                                      'Email : ',
+                                  itemBuilder: (_) => [
+                                    PopupMenuItem(
+                                      child: Text('Edit profile Picture'),
+                                      value: FilterOptions.Favorites,
                                     ),
-                                    prefixIcon: Icon(
-                                      Icons.email,
-                                      color: Color(0xff1c69a2),
+                                    PopupMenuItem(
+                                      child: Text('Remove Profile Picture'),
+                                      value: FilterOptions.All,
                                     ),
-                                    border: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 15,
-                                        bottom: 15,
-                                        top: 15,
-                                        right: 15),
-                                  ),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            Positioned(
-                                bottom: 35,
-                                right: 50,
+                              ))
+                        ]),
+                        const SizedBox(
+                          height: 25.0,
+                        ),
+                        Form(
+                            child: Column(
+                          children: [
+                            Stack(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
                                 child: Container(
-                                  height: 35,
-                                  width: 35,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(width: 2),
+                                    borderRadius: BorderRadius.circular(60),
                                     color: Colors.white,
                                   ),
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: Colors.black38,
-                                    size: 20,
-                                  ),
-                                )),
-                          ]),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          Stack(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: 2),
-                                  borderRadius: BorderRadius.circular(60),
-                                  color: Colors.white,
-                                ),
-                                child: TextFormField(
-                                  initialValue: userData.gender ?? '',
-                                  decoration: InputDecoration(
-                                    label: Text(
-                                      'Gender : ',
+                                  child: TextFormField(
+                                    initialValue: userData.name ?? '',
+                                    decoration: InputDecoration(
+                                      label: Text(
+                                        'Name : ',
+                                      ),
+                                      prefixIcon: Icon(Icons.person,
+                                          color: Color(0xff9a3a51)),
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(
+                                          left: 15,
+                                          bottom: 15,
+                                          top: 15,
+                                          right: 15),
                                     ),
-                                    prefixIcon: Icon(Icons.male,
-                                        color: Color(0xff9a3a51)),
-                                    border: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 15,
-                                        bottom: 15,
-                                        top: 15,
-                                        right: 15),
                                   ),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                                bottom: 35,
-                                right: 50,
-                                child: Container(
-                                  height: 35,
-                                  width: 35,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white,
-                                  ),
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: Colors.black38,
-                                    size: 20,
-                                  ),
-                                )),
-                          ]),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          Stack(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(60),
-                                  border: Border.all(width: 2),
-                                  color: Colors.white,
-                                ),
-                                child: TextFormField(
-                                  initialValue: userData.country ?? '',
-                                  decoration: InputDecoration(
-                                    label: Text(
-                                      'Country : ',
-                                    ),
-                                    prefixIcon: Icon(
-                                      Icons.countertops,
-                                      color: Color(0xff1c69a2),
-                                    ),
-                                    border: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 15,
-                                        bottom: 15,
-                                        top: 15,
-                                        right: 15),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                                bottom: 35,
-                                right: 50,
-                                child: Container(
-                                  height: 35,
-                                  width: 35,
-                                  decoration: BoxDecoration(
+                              Positioned(
+                                  bottom: 35,
+                                  right: 50,
+                                  child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
-                                      color: Colors.white),
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: Colors.black38,
-                                    size: 20,
+                                      color: Colors.white,
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.black38,
+                                      size: 20,
+                                    ),
+                                  )),
+                            ]),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Stack(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(width: 2),
+                                    borderRadius: BorderRadius.circular(60),
+                                    color: Colors.white,
                                   ),
-                                )),
-                          ]),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                        ],
-                      )),
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  print("no");
-                  print("Error while fetching user data: ${snapshot.error}");
-                  return Center(child: Text(snapshot.error.toString()));
+                                  child: TextFormField(
+                                    initialValue: userData.email ?? '',
+                                    decoration: InputDecoration(
+                                      label: Text(
+                                        'Email : ',
+                                      ),
+                                      prefixIcon: Icon(
+                                        Icons.email,
+                                        color: Color(0xff1c69a2),
+                                      ),
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(
+                                          left: 15,
+                                          bottom: 15,
+                                          top: 15,
+                                          right: 15),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                  bottom: 35,
+                                  right: 50,
+                                  child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.white,
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.black38,
+                                      size: 20,
+                                    ),
+                                  )),
+                            ]),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Stack(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(width: 2),
+                                    borderRadius: BorderRadius.circular(60),
+                                    color: Colors.white,
+                                  ),
+                                  child: TextFormField(
+                                    initialValue: userData.gender ?? '',
+                                    decoration: InputDecoration(
+                                      label: Text(
+                                        'Gender : ',
+                                      ),
+                                      prefixIcon: Icon(Icons.male,
+                                          color: Color(0xff9a3a51)),
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(
+                                          left: 15,
+                                          bottom: 15,
+                                          top: 15,
+                                          right: 15),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                  bottom: 35,
+                                  right: 50,
+                                  child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.white,
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.black38,
+                                      size: 20,
+                                    ),
+                                  )),
+                            ]),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Stack(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(60),
+                                    border: Border.all(width: 2),
+                                    color: Colors.white,
+                                  ),
+                                  child: TextFormField(
+                                    initialValue: userData.country ?? '',
+                                    decoration: InputDecoration(
+                                      label: Text(
+                                        'Country : ',
+                                      ),
+                                      prefixIcon: Icon(
+                                        Icons.countertops,
+                                        color: Color(0xff1c69a2),
+                                      ),
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(
+                                          left: 15,
+                                          bottom: 15,
+                                          top: 15,
+                                          right: 15),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                  bottom: 35,
+                                  right: 50,
+                                  child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        color: Colors.white),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.black38,
+                                      size: 20,
+                                    ),
+                                  )),
+                            ]),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                          ],
+                        )),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    print("no");
+                    print("Error while fetching user data: ${snapshot.error}");
+                    return Center(child: Text(snapshot.error.toString()));
+                  } else {
+                    print("noooo");
+                    return const Center(child: Text("Something went wrong"));
+                  }
                 } else {
-                  print("noooo");
-                  return const Center(child: Text("Something went wrong"));
+                  return const Center(child: CircularProgressIndicator());
                 }
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
+              },
+            ),
           ),
         ),
       ),
