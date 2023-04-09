@@ -10,6 +10,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+enum FilterOptions {
+  Favorites,
+  All,
+}
+
 class ProfileScreen extends StatefulWidget {
   @override
   static const routeName = '/profile';
@@ -50,21 +55,23 @@ class ProfileScreenState extends State<ProfileScreen> {
       // Update the user's profile picture URL in Firestore
 
       print('HHHHHHHHHHHHHHHHHH  ' + user!.uid);
+
       await FirebaseFirestore.instance
           .collection('Users')
           .where('email', isEqualTo: user.email)
           .get()
           .then((querySnapshot) {
             querySnapshot.docs.forEach((documentSnapshot) {
-              documentSnapshot.reference.set(
-                  {'profile_picture_url': downloadURL},
-                  SetOptions(merge: true));
+              setState(() {
+                documentSnapshot.reference.set(
+                    {'profile_picture_url': downloadURL},
+                    SetOptions(merge: true));
+              });
             });
           })
           .then((value) => print('Profile picture updated successfully'))
           .catchError(
               (error) => print('Failed to update profile picture: $error'));
-
       return downloadURL;
     } catch (error) {
       print(error);
@@ -209,17 +216,47 @@ class ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius: BorderRadius.circular(100),
                                 color: Colors.amberAccent,
                               ),
-                              child: InkWell(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: (builder) => bottomsheet());
+                              child: PopupMenuButton(
+                                onSelected: (FilterOptions selectedValue) {
+                                  if (selectedValue ==
+                                      FilterOptions.Favorites) {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (builder) => bottomsheet());
+                                  } else {
+                                    imageProvider = AssetImage(
+                                        'assets/drawables/blank-profile-picture-973460_1280.webp');
+                                    FirebaseFirestore.instance
+                                        .collection('Users')
+                                        .where('email', isEqualTo: user!.email)
+                                        .get()
+                                        .then((querySnapshot) {
+                                      querySnapshot.docs.forEach((doc) {
+                                        setState(() {
+                                          doc.reference.update({
+                                            'profile_picture_url':
+                                                FieldValue.delete()
+                                          });
+                                        });
+                                      });
+                                    });
+                                  }
                                 },
-                                child: const Icon(
+                                icon: const Icon(
                                   Icons.edit,
                                   color: Colors.black,
                                   size: 20,
                                 ),
+                                itemBuilder: (_) => [
+                                  PopupMenuItem(
+                                    child: Text('Edit profile Picture'),
+                                    value: FilterOptions.Favorites,
+                                  ),
+                                  PopupMenuItem(
+                                    child: Text('Remove Profile Picture'),
+                                    value: FilterOptions.All,
+                                  ),
+                                ],
                               ),
                             ))
                       ]),

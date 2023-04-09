@@ -46,6 +46,8 @@ dependencies:
   country_picker: ^2.0.20
   image_picker: ^0.8.7+1
   firebase_storage: ^11.1.0
+  salomon_bottom_bar: ^3.3.2
+  concentric_transition: ^1.0.3
   
   
 
