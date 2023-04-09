@@ -3,6 +3,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:tottracker/NEW_SCREENS/app_drawer.dart';
+import 'package:tottracker/custom_drawer/drawer_user_controller.dart';
+import 'package:tottracker/custom_drawer/home_drawer.dart';
 import 'package:tottracker/widgets/features_grid.dart';
 
 enum FilterOptions {

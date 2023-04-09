@@ -3,6 +3,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:tottracker/NEW_SCREENS/feedback_screen.dart';
+import 'package:tottracker/NEW_SCREENS/help_screen.dart';
+import 'package:tottracker/NEW_SCREENS/invite_friend_screen.dart';
 import 'package:tottracker/NEW_SCREENS/profile_screen.dart';
 import 'package:tottracker/api/auth_repositry.dart';
 
@@ -25,29 +28,42 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(Icons.person),
               title: Text('Profile'),
               onTap: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(ProfileScreen.routeName);
+               
+               Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          ));
               }),
           ListTile(
               leading: Icon(Icons.shop),
-              title: Text('Features'),
+              title: Text('Help'),
               onTap: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(FeaturesOverviewScreen.routeName);
+               Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HelpScreen(),
+                          ));
               }),
           ListTile(
-              leading: Icon(Icons.mail),
-              title: Text('Contact'),
+              leading: Icon(Icons.help),
+              title: Text('Feedback'),
               onTap: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(FeaturesOverviewScreen.routeName);
+                Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FeedbackScreen(),
+                          ));
               }),
           ListTile(
-              leading: Icon(Icons.question_mark),
-              title: Text('FAQ'),
+              leading: Icon(Icons.group),
+              title: Text('Invite A Friend'),
               onTap: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(FeaturesOverviewScreen.routeName);
+                Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => InviteFriend(),
+                          ));
               }),
           ListTile(
               leading: Icon(Icons.exit_to_app),

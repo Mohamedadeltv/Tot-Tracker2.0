@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tottracker/NEW_SCREENS/feature_detail_screen.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
+import 'package:tottracker/NEW_SCREENS/feedback_screen.dart';
 import 'package:tottracker/NEW_SCREENS/first_screen.dart';
 import 'package:tottracker/NEW_SCREENS/forget_password_screen.dart';
+import 'package:tottracker/NEW_SCREENS/help_screen.dart';
+import 'package:tottracker/NEW_SCREENS/invite_friend_screen.dart';
 import 'package:tottracker/NEW_SCREENS/main_screen.dart';
 import 'package:tottracker/NEW_SCREENS/profile_screen.dart';
 import 'package:tottracker/NEW_SCREENS/signin.dart';
@@ -47,6 +50,9 @@ class MyApp extends StatelessWidget {
           MainScreen.routeName: (ctx) => MainScreen(),
           ProfileScreen.routeName: (ctx) => ProfileScreen(),
           ForgetPasswordSreen.routeName: (ctx) => ForgetPasswordSreen(),
+          FeedbackScreen.routeName: (ctx) => FeedbackScreen(),
+          HelpScreen.routeName: (ctx) => HelpScreen(),
+          InviteFriend.routeName: (ctx) => InviteFriend(),
         },
       ),
     );
