@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'drag.dart';
 
 class BraceletForm extends StatefulWidget {
+  final Function() toggle;
+  BraceletForm(this.toggle);
   @override
   _BraceletFormState createState() => _BraceletFormState();
 }
@@ -45,10 +47,12 @@ class _BraceletFormState extends State<BraceletForm> {
           }, SetOptions(merge: true));
         } else {
           // If the bracelet code doesn't exist, add a new document to the Bracelets collection
+          final now = DateTime.now();
           await FirebaseFirestore.instance.collection('Bracelets').add({
             'braceletCode': _braceletCode,
             'babyName': _babyName,
             'users': [user!.email],
+            'timestamp': now,
           }).then((braceletRef) async {
             await userDoc.set({
               'Bracelets': FieldValue.arrayUnion([braceletRef]),
@@ -58,7 +62,7 @@ class _BraceletFormState extends State<BraceletForm> {
       } else {
         print('No user found with email: ${user.email}');
       }
-
+      widget.toggle();
       // Clear the form after submitting it
       _formKey.currentState?.reset();
     }

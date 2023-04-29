@@ -51,7 +51,11 @@ class _ArrowWidgetState extends State<ArrowWidget> {
             SizedBox(height: 20),
             if (_showNewWidget) // Only show this widget if _showNewWidget is true
               SizedBox(
-                  height: 270, width: double.infinity, child: BraceletForm()),
+                  height: 270,
+                  width: double.infinity,
+                  child: BraceletForm(
+                    _toggleNewWidget,
+                  )),
             Text(
               'Bracelet List',
               style: TextStyle(
