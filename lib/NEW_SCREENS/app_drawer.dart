@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:tottracker/NEW_SCREENS/bracelet_screen.dart';
+import 'package:tottracker/NEW_SCREENS/drag.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:tottracker/NEW_SCREENS/feedback_screen.dart';
 import 'package:tottracker/NEW_SCREENS/help_screen.dart';
 import 'package:tottracker/NEW_SCREENS/invite_friend_screen.dart';
+import 'package:tottracker/NEW_SCREENS/link_account.dart';
 import 'package:tottracker/NEW_SCREENS/profile_screen.dart';
 import 'package:tottracker/api/auth_repositry.dart';
 
@@ -65,6 +68,17 @@ class AppDrawer extends StatelessWidget {
                             builder: (context) => InviteFriend(),
                           ));
               }),
+          ListTile(
+              leading: Icon(Icons.group),
+              title: Text('Manage Bracelets'),
+              onTap: () {
+                Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ArrowWidget(),
+                          ));
+              }),
+          
           ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Logout'),

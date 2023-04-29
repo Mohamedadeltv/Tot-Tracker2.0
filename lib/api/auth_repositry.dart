@@ -1,16 +1,11 @@
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_SCREENS/first_screen.dart';
 import 'package:tottracker/NEW_SCREENS/main_screen.dart';
-import 'package:tottracker/NEW_SCREENS/preFeatures_Screen.dart';
-import 'package:tottracker/NEW_SCREENS/signup.dart';
 import 'package:tottracker/models/signup_email_password_failure.dart';
+import 'package:provider/provider.dart';
 
 class AuthenticationRepositry extends GetxController {
   static AuthenticationRepositry get instance => Get.find();
@@ -29,7 +24,7 @@ class AuthenticationRepositry extends GetxController {
   _setInitialScreen(User? user) {
     user == null
         ? Get.offAll(() => const FirstScreen())
-        : Get.offAll(() =>  const FeaturesOverviewScreen());
+        : Get.offAll(() => const FeaturesOverviewScreen());
   }
 
   dialog(String error) {
@@ -56,7 +51,46 @@ class AuthenticationRepositry extends GetxController {
           email: email, password: password);
       firebaseUser.value == null
           ? Get.offAll(() => const MainScreen())
-          : Get.offAll(() =>  const FeaturesOverviewScreen());
+          : Get.offAll(() => const FeaturesOverviewScreen());
+    } on FirebaseAuthException catch (e) {
+      final ex = SignUpWithEmailAndPasswordFailure.code(e.code);
+      dialog(ex.message);
+      throw ex;
+    } catch (_) {
+      const ex = SignUpWithEmailAndPasswordFailure();
+      dialog(ex.message);
+      throw ex;
+    }
+  }
+
+  Future<void> createUserWithEmailAndPasswordandLinkAccount(
+      String email, String password, String linkedAccount) async {
+    try {
+      // final currentUser = FirebaseAuth.instance.currentUser;
+      // final otherUserCredential = EmailAuthProvider.credential(
+      //   email: email,
+      //   password: password,
+      // );
+      // List<UserInfo> providerData = currentUser!.providerData;
+      // final isAlreadyLinked = providerData.any(
+      //     (provider) => provider.providerId == otherUserCredential.providerId);
+
+      // if (isAlreadyLinked) {
+      //   // Provider is already linked to user's account, handle error accordingly.
+      //   print('Error: Provider is already linked to user\'s account');
+      // } else {
+      //   // Provider is not linked to user's account, link the account.
+      //   try {
+      //     final authResult =
+      //         await currentUser.linkWithCredential(otherUserCredential);
+      //     print('Successfully linked account');
+      //   } catch (e) {
+      //     print('Error linking account: $e');
+      //   }
+      // }
+      firebaseUser.value == null
+          ? Get.offAll(() => const MainScreen())
+          : Get.offAll(() => const FeaturesOverviewScreen());
     } on FirebaseAuthException catch (e) {
       final ex = SignUpWithEmailAndPasswordFailure.code(e.code);
       dialog(ex.message);
