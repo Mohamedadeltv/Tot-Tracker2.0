@@ -11,6 +11,7 @@ class BraceletsList extends StatelessWidget {
       stream: FirebaseFirestore.instance
           .collection('Bracelets')
           .where('users', arrayContains: user?.email)
+          .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
