@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 
 import '../custom_drawer/app_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../providers/user.dart';
+
 
 class FeedbackScreen extends StatefulWidget {
   static const routeName = '/feedback';
@@ -10,16 +15,51 @@ class FeedbackScreen extends StatefulWidget {
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
+  final TextEditingController _textEditingController = TextEditingController();
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> _sendFeedback(String feedback) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final CollectionReference feedbackRef =
+          FirebaseFirestore.instance.collection('Feedbacks');
+
+// Add the feedback to the "Feedbacks" collection
+      final feedbackDocRef = await feedbackRef.add({
+        'user email': user!.email,
+        'feedback': feedback,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+// Get the user's document reference
+      final userQuerySnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: user!.email)
+          .get();
+      final userDoc = userQuerySnapshot.docs.first.reference;
+      await userDoc.set({
+        'feedbacks': FieldValue.arrayUnion([feedbackDocRef]),
+      }, SetOptions(merge: true));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Feedback sent successfully!'),
+        duration: Duration(seconds: 2),
+      ));
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Failed to send feedback!'),
+        duration: Duration(seconds: 2),
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isLightMode = brightness == Brightness.light;
-        return WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         // Navigate back to the previous page
         Navigator.of(context).pop();
@@ -32,27 +72,30 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           top: false,
           child: Scaffold(
             appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
-          ),
-          centerTitle: true,
-          title: const Center(
-            child: Text(
-              'Feedback',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+              flexibleSpace: Container(
+                decoration:
+                    BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
+              ),
+              centerTitle: true,
+              title: const Center(
+                child: Text(
+                  'Feedback',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => FeaturesOverviewScreen()));
+                },
               ),
             ),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (_) => FeaturesOverviewScreen()));
-            },
-          ),
-        ),
             backgroundColor:
                 isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
             body: SingleChildScrollView(
@@ -109,7 +152,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: () {
-                                FocusScope.of(context).requestFocus(FocusNode());
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                _sendFeedback(_textEditingController.text);
                               },
                               child: Center(
                                 child: Padding(
@@ -149,9 +194,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           borderRadius: BorderRadius.circular(8),
           boxShadow: <BoxShadow>[
             BoxShadow(
-                color: Colors.grey.withOpacity(0.8),
-                offset: const Offset(4, 4),
-                blurRadius: 8),
+              color: Colors.grey.withOpacity(0.8),
+              offset: const Offset(4, 4),
+              blurRadius: 8,
+            ),
           ],
         ),
         child: ClipRRect(
@@ -161,20 +207,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             constraints: const BoxConstraints(minHeight: 80, maxHeight: 160),
             color: AppTheme.white,
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
               child: TextField(
-                maxLines: null,
-                onChanged: (String txt) {},
-                style: TextStyle(
-                  fontFamily: AppTheme.fontName,
-                  fontSize: 16,
-                  color: AppTheme.dark_grey,
-                ),
-                cursorColor: Colors.blue,
+                controller: _textEditingController, // use class field here
                 decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter your feedback...'),
+                  border: InputBorder.none,
+                  hintText: 'Enter your feedback...',
+                  contentPadding: const EdgeInsets.only(left: 16, bottom: 12),
+                ),
+                maxLines: null,
               ),
             ),
           ),
