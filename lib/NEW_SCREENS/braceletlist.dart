@@ -2,7 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class BraceletsList extends StatelessWidget {
+class BraceletsList extends StatefulWidget {
+  @override
+  State<BraceletsList> createState() => _BraceletsListState();
+}
+
+class _BraceletsListState extends State<BraceletsList> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -27,45 +32,127 @@ class BraceletsList extends StatelessWidget {
                 final bracelet = snapshot.data!.docs[index];
                 final braceletData = bracelet.data() as Map<String, dynamic>;
                 final braceletCode = braceletData['braceletCode'];
-                final babyName = braceletData['babyName'];
+                var babyName = braceletData['babyName'];
                 return Dismissible(
                   key: Key(braceletCode),
                   background: Container(
-                    color: Theme.of(context).errorColor,
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                      size: 40,
+                    color: Colors.green,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(width: 10),
+                        Icon(
+                          Icons.keyboard_double_arrow_right_rounded,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ],
                     ),
-                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(left: 20),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 4,
+                    ),
+                  ),
+                  secondaryBackground: Container(
+                    color: Theme.of(context).errorColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(width: 10),
+                        Icon(
+                          Icons.keyboard_double_arrow_left_rounded,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ],
+                    ),
                     padding: EdgeInsets.only(right: 20),
                     margin: EdgeInsets.symmetric(
                       horizontal: 15,
                       vertical: 4,
                     ),
                   ),
-                  direction: DismissDirection.endToStart,
-                  confirmDismiss: (direction) {
-                    return showDialog(
+                  direction: DismissDirection.horizontal,
+                  confirmDismiss: (direction) async {
+                    if (direction == DismissDirection.endToStart) {
+                      return showDialog(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                              title: Text('are you sure'),
-                              content: Text('do u wan to remove it?'),
-                              actions: <Widget>[
-                                OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.of(ctx).pop(false);
-                                  },
-                                  child: Text('no'),
-                                ),
-                                OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.of(ctx).pop(true);
-                                  },
-                                  child: Text('yes'),
-                                ),
-                              ],
-                            ));
+                          title: Text('Delete Bracelet'),
+                          content: Text(
+                              'Are you sure you want to delete this bracelet?'),
+                          actions: <Widget>[
+                            OutlinedButton(
+                              onPressed: () => Navigator.of(ctx).pop(false),
+                              child: Text('No'),
+                            ),
+                            OutlinedButton(
+                              onPressed: () => Navigator.of(ctx).pop(true),
+                              child: Text('Yes'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (direction == DismissDirection.startToEnd) {
+                      final textController = TextEditingController();
+                      String newBabyName = babyName;
+
+                      await showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text('Edit Baby Name'),
+                          content: TextField(
+                            controller: textController,
+                            decoration: InputDecoration(
+                              hintText: 'Enter new baby name',
+                            ),
+                            onChanged: (value) => newBabyName = value,
+                          ),
+                          actions: <Widget>[
+                            OutlinedButton(
+                              onPressed: () => Navigator.of(ctx).pop(),
+                              child: Text('Cancel'),
+                            ),
+                            OutlinedButton(
+                              onPressed: () async {
+                                final user = FirebaseAuth.instance.currentUser;
+                                final braceletQuerySnapshot =
+                                    await FirebaseFirestore.instance
+                                        .collection('Bracelets')
+                                        .where('braceletCode',
+                                            isEqualTo: braceletCode)
+                                        .get();
+                                final braceletDoc =
+                                    braceletQuerySnapshot.docs.first.reference;
+
+                                await FirebaseFirestore.instance
+                                    .collection('Bracelets')
+                                    .doc(braceletDoc.id)
+                                    .update({
+                                  'babyName': newBabyName,
+                                });
+                                setState(() {
+                                  babyName = newBabyName;
+                                });
+                                Navigator.of(ctx).pop();
+                              },
+                              child: Text('Save'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   child: Card(
                       elevation: 9.0,
@@ -116,22 +203,23 @@ class BraceletsList extends StatelessWidget {
                             )),
                       )),
                   onDismissed: (direction) async {
-                    final user = FirebaseAuth.instance.currentUser;
-
-                    final braceletQuerySnapshot = await FirebaseFirestore
-                        .instance
-                        .collection('Bracelets')
-                        .where('braceletCode', isEqualTo: braceletCode)
-                        .get();
-                    final braceletDoc =
-                        braceletQuerySnapshot.docs.first.reference;
-
-                    await FirebaseFirestore.instance
-                        .collection('Bracelets')
-                        .doc(braceletDoc.id)
-                        .update({
-                      'users': FieldValue.arrayRemove([user!.email])
-                    });
+                    if (direction == DismissDirection.endToStart) {
+                      // swiped from right to left
+                      final user = FirebaseAuth.instance.currentUser;
+                      final braceletQuerySnapshot = await FirebaseFirestore
+                          .instance
+                          .collection('Bracelets')
+                          .where('braceletCode', isEqualTo: braceletCode)
+                          .get();
+                      final braceletDoc =
+                          braceletQuerySnapshot.docs.first.reference;
+                      await FirebaseFirestore.instance
+                          .collection('Bracelets')
+                          .doc(braceletDoc.id)
+                          .update({
+                        'users': FieldValue.arrayRemove([user!.email])
+                      });
+                    } else if (direction == DismissDirection.startToEnd) {}
                   },
                 );
               },
