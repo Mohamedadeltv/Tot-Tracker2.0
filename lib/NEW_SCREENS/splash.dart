@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:tottracker/NEW_SCREENS/signin.dart';
 import 'package:tottracker/NEW_SCREENS/signup.dart';
 
 class splash_screen extends StatefulWidget {

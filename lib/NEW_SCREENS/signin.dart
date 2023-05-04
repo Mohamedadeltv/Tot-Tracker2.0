@@ -1,19 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_SCREENS/forget_password_screen.dart';
-import 'package:tottracker/NEW_SCREENS/signup.dart';
-import 'package:provider/provider.dart';
 import 'package:tottracker/api/auth_repositry.dart';
-
 import '../NEW_WIDGETS/button.dart';
-import '../NEW_WIDGETS/text_fieldvol2.dart';
 
 class signin extends StatefulWidget {
-  const signin({super.key});
+  final Function() toggle;
+  signin(this.toggle);
 
   @override
   State<signin> createState() => _signinState();
@@ -26,6 +18,7 @@ class _signinState extends State<signin> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passFocusNode = FocusNode();
+
   var _isLoading = false;
   Map<String, String> _authData = {
     'email': '',
@@ -301,14 +294,19 @@ class _signinState extends State<signin> {
                       fontSize: 15,
                       fontWeight: FontWeight.w400),
                 ),
-                Text(
-                  ' Sign Up',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Color(0xff1c69a2),
-                      fontFamily: 'Silom',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400),
+                GestureDetector(
+                  onTap: () {
+                    widget.toggle();
+                  },
+                  child: Text(
+                    ' Sign Up',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Color(0xff1c69a2),
+                        fontFamily: 'Silom',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400),
+                  ),
                 ),
               ],
             ),

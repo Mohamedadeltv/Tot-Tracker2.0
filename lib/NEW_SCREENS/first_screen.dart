@@ -1,12 +1,6 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
-import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_SCREENS/main_screen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:tottracker/widgets/title_of_app.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:provider/provider.dart';
 class FirstScreen extends StatefulWidget {
    const FirstScreen({super.key});
   @override

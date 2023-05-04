@@ -5,7 +5,6 @@ import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_SCREENS/first_screen.dart';
 import 'package:tottracker/NEW_SCREENS/main_screen.dart';
 import 'package:tottracker/models/signup_email_password_failure.dart';
-import 'package:provider/provider.dart';
 
 class AuthenticationRepositry extends GetxController {
   static AuthenticationRepositry get instance => Get.find();
