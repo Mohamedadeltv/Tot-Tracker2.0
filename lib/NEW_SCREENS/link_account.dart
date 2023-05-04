@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../api/auth_repositry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
           FeaturesOverviewScreen.routeName: (ctx) => FeaturesOverviewScreen(),
           FeatureDetailScreen.routeName: (ctx) => FeatureDetailScreen(),
           MainScreen.routeName: (ctx) => MainScreen(),
-          ProfileScreen.routeName: (ctx) => ProfileScreen(),
+          ProfileScreens.routeName: (ctx) => ProfileScreens(),
           ForgetPasswordSreen.routeName: (ctx) => ForgetPasswordSreen(),
           FeedbackScreen.routeName: (ctx) => FeedbackScreen(),
           HelpScreen.routeName: (ctx) => HelpScreen(),

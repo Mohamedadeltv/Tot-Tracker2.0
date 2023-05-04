@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound_lite/public/flutter_sound_recorder.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:tottracker/api/sound_recorder.dart';
 import 'package:tottracker/widgets/timer.dart';
 

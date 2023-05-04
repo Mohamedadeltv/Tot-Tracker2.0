@@ -1,17 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:tottracker/NEW_SCREENS/signin.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:country_picker/country_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:tottracker/api/user_repositry.dart';
 import 'package:tottracker/providers/signup_controller.dart';
 import 'package:tottracker/providers/user.dart';
 import '../NEW_WIDGETS/button.dart';
-import '../NEW_WIDGETS/text_fieldvol2.dart';
 import 'package:get/get.dart';
 
 class signup extends StatefulWidget {

@@ -1,11 +1,7 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
-import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_SCREENS/signin.dart';
 import 'package:tottracker/NEW_SCREENS/signup.dart';
 import 'package:tottracker/widgets/title_of_app.dart';
-import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,6 +14,13 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   var _signup = false;
   var _signin = true;
+  void toggle() {
+    setState(() {
+    _signup = !_signup;
+    _signin = !_signin;
+      
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 228, 224, 224),
       appBar: appBar,
-      body: _signin ? signin() : signup(),
+      body: _signin ? signin(toggle) : signup(),
     );
   }
 }

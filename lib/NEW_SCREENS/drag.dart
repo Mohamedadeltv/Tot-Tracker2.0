@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tottracker/NEW_SCREENS/bracelet_screen.dart';
-
 import 'braceletlist.dart';
 
 class ArrowWidget extends StatefulWidget {
@@ -48,7 +47,6 @@ class _ArrowWidgetState extends State<ArrowWidget> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
             if (_showNewWidget) // Only show this widget if _showNewWidget is true
               SizedBox(
                   height: 270,
@@ -56,15 +54,31 @@ class _ArrowWidgetState extends State<ArrowWidget> {
                   child: BraceletForm(
                     _toggleNewWidget,
                   )),
-            Text(
-              'Bracelet List',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 109, 82, 82),
+                      offset: Offset(0.0, 1.0),
+                      blurRadius: 2.0,
+                    ),
+                  ],
+                ),
+                child: SizedBox(
+                  height: _showNewWidget ? 270 : 400,
+                  width: double.infinity,
+                  child: BraceletsList(),
+                ),
+              ),
             ),
-            SizedBox(
-                height: 270, width: double.infinity, child: BraceletsList()),
           ],
         ),
       ),

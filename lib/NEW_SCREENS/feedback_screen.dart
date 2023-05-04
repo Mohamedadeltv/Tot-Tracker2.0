@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
-
 import '../custom_drawer/app_theme.dart';
 import 'package:flutter/material.dart';
-
-import '../providers/user.dart';
-
 
 class FeedbackScreen extends StatefulWidget {
   static const routeName = '/feedback';
@@ -47,6 +43,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         content: Text('Feedback sent successfully!'),
         duration: Duration(seconds: 2),
       ));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FeaturesOverviewScreen(),
+          ));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Failed to send feedback!'),
@@ -72,30 +73,22 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           top: false,
           child: Scaffold(
             appBar: AppBar(
-              flexibleSpace: Container(
-                decoration:
-                    BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
-              ),
-              centerTitle: true,
-              title: const Center(
-                child: Text(
-                  'Feedback',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                automaticallyImplyLeading: false,
+                flexibleSpace: Container(
+                  decoration:
+                      BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
+                ),
+                centerTitle: true,
+                title: const Center(
+                  child: Text(
+                    'Feedback',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => FeaturesOverviewScreen()));
-                },
-              ),
-            ),
+                leading: null),
             backgroundColor:
                 isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
             body: SingleChildScrollView(
