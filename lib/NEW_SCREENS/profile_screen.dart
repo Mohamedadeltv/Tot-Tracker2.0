@@ -75,74 +75,136 @@ class ProfileScreensState extends State<ProfileScreens> {
     }
   }
 
+  bool _isEditingEnabled = false;
+
   void _editField(String fieldName) {}
 
   Widget buildEditableTextField(String label, String text, Icon icon,
-      bool isPassword, VoidCallback onEditPressed) {
+      bool isPassword, VoidCallback onEditPressed, bool isEditingEnabled) {
+    bool hideIcon = label == "email";
+    bool isGender = label == "gender";
+    String gender = text;
     return Row(
       children: [
         Expanded(
-          child: TextFormField(
-            initialValue: text,
-            readOnly: true,
-            obscureText: isPassword,
-            decoration: InputDecoration(
-              labelText: label,
-              labelStyle: TextStyle(color: Colors.grey),
-              prefixIcon: icon,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: 10),
-        IconButton(
-          icon: Icon(Icons.edit),
-          onPressed: () async {
-            final user = FirebaseAuth.instance.currentUser;
-            final braceletQuerySnapshot = await FirebaseFirestore.instance
-                .collection('Users')
-                .where(label, isEqualTo: text)
-                .get();
-            final braceletDoc = braceletQuerySnapshot.docs.first.reference;
-
-            await showDialog(
-              context: context,
-              builder: (ctx) {
-                String newText = text;
-                return AlertDialog(
-                  title: Text('Edit $label'),
-                  content: TextFormField(
-                    initialValue: text,
-                    onChanged: (value) {
-                      newText = value;
-                    },
+          child: Stack(
+            alignment: AlignmentDirectional.centerEnd,
+            children: [
+              TextFormField(
+                initialValue: text,
+                readOnly: !isEditingEnabled,
+                obscureText: isPassword,
+                decoration: InputDecoration(
+                  labelText: label,
+                  labelStyle: TextStyle(color: Colors.grey),
+                  prefixIcon: icon,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(ctx).pop();
-                      },
-                      child: Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        await braceletDoc.update({
-                          label: newText,
-                        });
-                        setState(() {
-                          text = newText;
-                        });
-                        Navigator.of(ctx).pop();
-                      },
-                      child: Text('Save'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
+                ),
+              ),
+              if (isEditingEnabled && !hideIcon)
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    final querySnapshot = await FirebaseFirestore.instance
+                        .collection('Users')
+                        .where(label, isEqualTo: text)
+                        .get();
+                    final docRef = querySnapshot.docs.first.reference;
+                    if (isGender) {
+                      await showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            height: 200,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    'Select Gender',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  DropdownButton<String>(
+                                    value: gender,
+                                    items: [
+                                      DropdownMenuItem(
+                                        child: Text('Male'),
+                                        value: 'male',
+                                      ),
+                                      DropdownMenuItem(
+                                        child: Text('Female'),
+                                        value: 'female',
+                                      ),
+                                    ],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        gender = value!;
+                                      });
+                                    },
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      await docRef.update({
+                                        label: gender,
+                                      });
+                                      setState(() {
+                                        text = gender;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Save'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      String newText = text;
+                      await showDialog(
+                        context: context,
+                        builder: (ctx) {
+                          return AlertDialog(
+                            title: Text('Edit $label'),
+                            content: TextFormField(
+                              initialValue: text,
+                              onChanged: (value) {
+                                newText = value;
+                              },
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  await docRef.update({
+                                    label: newText,
+                                  });
+                                  setState(() {
+                                    text = newText;
+                                  });
+                                  Navigator.of(ctx).pop();
+                                },
+                                child: Text('Save'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+            ],
+          ),
         ),
       ],
     );
@@ -230,6 +292,16 @@ class ProfileScreensState extends State<ProfileScreens> {
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(_isEditingEnabled ? Icons.cancel : Icons.edit),
+            onPressed: () {
+              setState(() {
+                _isEditingEnabled = !_isEditingEnabled;
+              });
+            },
+          ),
+        ],
         leading: null,
         automaticallyImplyLeading: false,
         title: Center(
@@ -336,78 +408,91 @@ class ProfileScreensState extends State<ProfileScreens> {
                             children: [
                               const SizedBox(height: 20),
                               buildEditableTextField(
-                                "name",
-                                userData.name ?? '',
-                                Icon(Icons.person, color: Color(0xff9a3a51)),
-                                false,
-                                () => _editField('name'),
-                              ),
+                                  "name",
+                                  userData.name ?? '',
+                                  Icon(Icons.person, color: Color(0xff9a3a51)),
+                                  false,
+                                  () => _editField('name'),
+                                  _isEditingEnabled),
                               const SizedBox(height: 15),
                               buildEditableTextField(
-                                "email",
-                                userData.email ?? '',
-                                Icon(Icons.email, color: Color(0xff1c69a2)),
-                                false,
-                                () => _editField('email'),
-                              ),
+                                  "email",
+                                  userData.email ?? '',
+                                  Icon(Icons.email, color: Color(0xff1c69a2)),
+                                  false,
+                                  () => _editField('email'),
+                                  _isEditingEnabled),
                               const SizedBox(height: 15),
                               buildEditableTextField(
-                                "password",
-                                userData.password ?? '',
-                                Icon(Icons.lock, color: Color(0xff9a3a51)),
-                                true,
-                                () => _editField('password'),
-                              ),
+                                  "password",
+                                  userData.password ?? '',
+                                  Icon(Icons.lock, color: Color(0xff9a3a51)),
+                                  true,
+                                  () => _editField('password'),
+                                  _isEditingEnabled),
                               const SizedBox(height: 15),
                               buildEditableTextField(
-                                "gender",
-                                userData.gender ?? '',
-                                Icon(Icons.male, color: Color(0xff1c69a2)),
-                                false,
-                                () => _editField('gender'),
-                              ),
+                                  "gender",
+                                  userData.gender ?? '',
+                                  Icon(Icons.male, color: Color(0xff1c69a2)),
+                                  false,
+                                  () => _editField('gender'),
+                                  _isEditingEnabled),
                               const SizedBox(height: 15),
                               buildEditableTextField(
-                                "country",
-                                userData.country ?? '',
-                                Icon(Icons.countertops,
-                                    color: Color(0xff9a3a51)),
-                                false,
-                                () => _editField('country'),
-                              ),
+                                  "country",
+                                  userData.country ?? '',
+                                  Icon(Icons.countertops,
+                                      color: Color(0xff9a3a51)),
+                                  false,
+                                  () => _editField('country'),
+                                  _isEditingEnabled),
                               const SizedBox(height: 15),
                             ],
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () {},
-                              child: Text("cancel",
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black)),
-                              style: OutlinedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(horizontal: 50),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20))),
-                            ),
-                            ElevatedButton(
-                                onPressed: () {},
-                                child: Text("save",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        letterSpacing: 2,
-                                        color: Colors.white)),
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.blue,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 50),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20))))
-                          ],
-                        ),
+                        _isEditingEnabled
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _isEditingEnabled = false;
+                                      });
+                                    },
+                                    child: Text("cancel",
+                                        style: TextStyle(
+                                            fontSize: 15, color: Colors.black)),
+                                    style: OutlinedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 50),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20))),
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _isEditingEnabled = false;
+                                        });
+                                      },
+                                      child: Text("save",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              letterSpacing: 2,
+                                              color: Colors.white)),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.blue,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 50),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20))))
+                                ],
+                              )
+                            : SizedBox(),
                       ],
                     );
                   } else if (snapshot.hasError) {
