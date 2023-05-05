@@ -57,57 +57,77 @@ class _FeaturesOverviewScreenState extends State<FeaturesOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 228, 224, 224),
-      appBar: _selectedIndex == 0
-          ? AppBar(
-              backgroundColor: Color.fromARGB(255, 15, 53, 143),
-              title: Center(
-                  child: Text(
-                'Features',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Silom'),
-              )),
-              actions: <Widget>[
-                PopupMenuButton(
-                  onSelected: (FilterOptions selectedValue) {
-                    setState(() {
-                      if (selectedValue == FilterOptions.Favorites) {
-                        _showOnlyFavorites = true;
-                      } else {
-                        _showOnlyFavorites = false;
-                      }
-                    });
-                  },
-                  icon: Icon(
-                    Icons.more_vert,
+    return WillPopScope(
+      onWillPop: () async {
+        // Handle the back button press manually
+        if (_selectedIndex == 0) {
+          // If we're on the first tab, exit the app
+          return true;
+        } else {
+          // Otherwise, switch to the first tab and consume the back button press
+          setState(() {
+            _selectedIndex = 0;
+          });
+          return false;
+        }
+      },
+      child:  Scaffold(
+        backgroundColor: Color.fromARGB(255, 228, 224, 224),
+        appBar: _selectedIndex == 0
+            ? AppBar(
+                backgroundColor: Color.fromARGB(255, 15, 53, 143),
+                title: Center(
+                    child: Text(
+                  'Features',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontFamily: 'Silom'),
+                )),
+                actions: <Widget>[
+                  PopupMenuButton(
+                    onSelected: (FilterOptions selectedValue) {
+                      setState(() {
+                        if (selectedValue == FilterOptions.Favorites) {
+                          _showOnlyFavorites = true;
+                        } else {
+                          _showOnlyFavorites = false;
+                        }
+                      });
+                    },
+                    icon: Icon(
+                      Icons.more_vert,
+                    ),
+                    itemBuilder: (_) => [
+                      PopupMenuItem(
+                        child: Text('Only Favorites'),
+                        value: FilterOptions.Favorites,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Show All'),
+                        value: FilterOptions.All,
+                      ),
+                    ],
                   ),
-                  itemBuilder: (_) => [
-                    PopupMenuItem(
-                      child: Text('Only Favorites'),
-                      value: FilterOptions.Favorites,
-                    ),
-                    PopupMenuItem(
-                      child: Text('Show All'),
-                      value: FilterOptions.All,
-                    ),
-                  ],
-                ),
-              ],
-            )
-          : null,
-      drawer: AppDrawer(),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: SalomonBottomBar(
-          currentIndex: _selectedIndex,
-          selectedItemColor: const Color(0xff6200ee),
-          unselectedItemColor: const Color(0xff757575),
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          items: _navBarItems),
+                ],
+              )
+            : null,
+        drawer: AppDrawer(),
+        body: _pages[_selectedIndex],
+        bottomNavigationBar: TickerMode(
+          enabled: false,
+          child: SalomonBottomBar(
+              currentIndex: _selectedIndex,
+              selectedItemColor: const Color(0xff6200ee),
+              unselectedItemColor: const Color(0xff757575),
+              onTap: (index) {
+                Future.delayed(Duration.zero, () {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                });
+              },
+              items: _navBarItems),
+        ),
+      ),
     );
   }
 }
