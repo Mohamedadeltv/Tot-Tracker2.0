@@ -112,22 +112,20 @@ class _FeaturesOverviewScreenState extends State<FeaturesOverviewScreen> {
             : null,
         drawer: AppDrawer(),
         body: _pages[_selectedIndex],
-        bottomNavigationBar: TickerMode(
-          enabled: false,
-          child: SalomonBottomBar(
+        bottomNavigationBar: SalomonBottomBar(
               currentIndex: _selectedIndex,
               selectedItemColor: const Color(0xff6200ee),
               unselectedItemColor: const Color(0xff757575),
               onTap: (index) {
-                Future.delayed(Duration.zero, () {
+               
                   setState(() {
                     _selectedIndex = index;
                   });
-                });
+                
               },
               items: _navBarItems),
         ),
-      ),
+      
     );
   }
 }
