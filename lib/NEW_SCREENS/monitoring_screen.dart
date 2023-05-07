@@ -172,7 +172,7 @@ class DashScreen extends StatefulWidget {
 }
 
 class _DashScreenState extends State<DashScreen> {
-   Widget? screenView;
+  Widget? screenView;
   DrawerIndex? drawerIndex;
 
   @override
@@ -181,6 +181,7 @@ class _DashScreenState extends State<DashScreen> {
     screenView = const DashScreen();
     super.initState();
   }
+
   var _showOnlyFavorites = false;
   int _selectedIndex = 0;
   late final List<Widget> _pages;
@@ -208,10 +209,24 @@ class _DashScreenState extends State<DashScreen> {
         }
       },
       child: Scaffold(
+        appBar: AppBar(
+            centerTitle: true,
+            title: const Center(
+              child: Text(
+                'TotTracker',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            leading: null),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 85,),
+              SizedBox(
+                height: 25,
+              ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -222,7 +237,7 @@ class _DashScreenState extends State<DashScreen> {
                   );
                 },
                 child: BoxDash(
-                  Text1: "Status",
+                  Text1: "",
                   Text2: "Baby Crying Analyzer",
                   Text3: "",
                   color: Colors.red,

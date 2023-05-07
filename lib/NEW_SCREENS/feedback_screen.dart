@@ -74,10 +74,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           child: Scaffold(
             appBar: AppBar(
                 automaticallyImplyLeading: false,
-                flexibleSpace: Container(
-                  decoration:
-                      BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
-                ),
                 centerTitle: true,
                 title: const Center(
                   child: Text(

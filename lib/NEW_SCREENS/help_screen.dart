@@ -3,7 +3,7 @@ import '../custom_drawer/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class HelpScreen extends StatefulWidget {
-    static const routeName = '/helpscreen';
+  static const routeName = '/helpscreen';
 
   @override
   _HelpScreenState createState() => _HelpScreenState();
@@ -31,22 +31,18 @@ class _HelpScreenState extends State<HelpScreen> {
         child: SafeArea(
           top: false,
           child: Scaffold(
-             appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
-          ),
-          centerTitle: true,
-          title: const Center(
-            child: Text(
-              'Help',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          leading: null
-        ),
+            appBar: AppBar(
+                centerTitle: true,
+                title: const Center(
+                  child: Text(
+                    'Help',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                leading: null),
             backgroundColor:
                 isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
             body: Column(
@@ -107,8 +103,9 @@ class _HelpScreenState extends State<HelpScreen> {
                                   'Chat with Us',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    color:
-                                        isLightMode ? Colors.white : Colors.black,
+                                    color: isLightMode
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
                                 ),
                               ),

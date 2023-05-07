@@ -34,10 +34,6 @@ class _InviteFriendState extends State<InviteFriend> {
           child: Scaffold(
             appBar: AppBar(
                 automaticallyImplyLeading: false,
-                flexibleSpace: Container(
-                  decoration:
-                      BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
-                ),
                 centerTitle: true,
                 title: const Center(
                   child: Text(
