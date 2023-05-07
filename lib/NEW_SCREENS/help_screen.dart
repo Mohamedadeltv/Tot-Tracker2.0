@@ -45,13 +45,7 @@ class _HelpScreenState extends State<HelpScreen> {
               ),
             ),
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (_) => FeaturesOverviewScreen()));
-            },
-          ),
+          leading: null
         ),
             backgroundColor:
                 isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,

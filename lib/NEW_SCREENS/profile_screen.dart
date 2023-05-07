@@ -332,7 +332,6 @@ class ProfileScreensState extends State<ProfileScreens> {
                     U.User userData = snapshot.data as U.User;
                     TextEditingController nameController =
                         TextEditingController(text: userData.name ?? '');
-
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,

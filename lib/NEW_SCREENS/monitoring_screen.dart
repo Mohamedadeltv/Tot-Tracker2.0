@@ -2,8 +2,12 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:tottracker/NEW_SCREENS/app_drawer.dart';
 import 'package:tottracker/NEW_SCREENS/baby_cry_analyzer_screen.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
+import 'package:tottracker/NEW_SCREENS/profile_screen.dart';
+import 'package:tottracker/custom_drawer/home_drawer.dart';
 import 'package:tottracker/providers/profile_controller.dart';
 import '../providers/user.dart' as U;
 import 'package:get/get.dart';
@@ -147,71 +151,127 @@ class RowCard extends StatelessWidget {
   }
 }
 
-class DashScreen extends StatelessWidget {
+final _navBarItems = [
+  SalomonBottomBarItem(
+    icon: const Icon(Icons.home),
+    title: const Text("Home"),
+    selectedColor: Colors.purple,
+  ),
+  SalomonBottomBarItem(
+    icon: const Icon(Icons.person),
+    title: const Text("Profile"),
+    selectedColor: Colors.teal,
+  ),
+];
+
+class DashScreen extends StatefulWidget {
   const DashScreen({Key? key}) : super(key: key);
 
   @override
+  State<DashScreen> createState() => _DashScreenState();
+}
+
+class _DashScreenState extends State<DashScreen> {
+   Widget? screenView;
+  DrawerIndex? drawerIndex;
+
+  @override
+  void initState() {
+    drawerIndex = DrawerIndex.HOME;
+    screenView = const DashScreen();
+    super.initState();
+  }
+  var _showOnlyFavorites = false;
+  int _selectedIndex = 0;
+  late final List<Widget> _pages;
+  _FeaturesOverviewScreenState() {
+    _pages = [
+      DashScreen(),
+      ProfileScreens(),
+    ];
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(),
-      appBar: AppBar(
-        title: Text(
-          "Baby monitor",
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BabyCryAnalyzerScreen(),
-          ),
-        );
+    return WillPopScope(
+      onWillPop: () async {
+        // Handle the back button press manually
+        if (_selectedIndex == 0) {
+          // If we're on the first tab, exit the app
+          return true;
+        } else {
+          // Otherwise, switch to the first tab and consume the back button press
+          setState(() {
+            _selectedIndex = 0;
+          });
+          return false;
+        }
       },
-      child:  BoxDash(
-                Text1: "Status",
-                Text2: "Baby Crying Analyzer",
-                Text3: "",
-                color: Colors.red,
-                icon: Icons.mic,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 85,),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BabyCryAnalyzerScreen(),
+                    ),
+                  );
+                },
+                child: BoxDash(
+                  Text1: "Status",
+                  Text2: "Baby Crying Analyzer",
+                  Text3: "",
+                  color: Colors.red,
+                  icon: Icons.mic,
+                ),
               ),
-            ),
-            BoxDash(
-              Text1: "Status",
-              Text2: "Sleeping",
-              Text3: "",
-              color: Colors.blueAccent,
-              icon: Icons.offline_pin,
-            ),
-            Row(
-              children: [
-                RowCard(
-                  Text1: "Blood Pressure",
-                  Text2: "50",
-                  color: Colors.orange,
-                  icon: Icons.send,
-                ),
-                RowCard(
-                  Text1: "Temperature",
-                  Text2: "37",
-                  color: Colors.grey,
-                  icon: Icons.group,
-                ),
-              ],
-            ),
-            BoxDash(
-              Text1: "Growth monitoring",
-              Text2: "weght:",
-              Text3: "height:",
-              color: Colors.green,
-              icon: Icons.email,
-            ),
-          ],
+              BoxDash(
+                Text1: "Status",
+                Text2: "Sleeping",
+                Text3: "",
+                color: Colors.blueAccent,
+                icon: Icons.offline_pin,
+              ),
+              Row(
+                children: [
+                  RowCard(
+                    Text1: "Blood Pressure",
+                    Text2: "50",
+                    color: Colors.orange,
+                    icon: Icons.send,
+                  ),
+                  RowCard(
+                    Text1: "Temperature",
+                    Text2: "37",
+                    color: Colors.grey,
+                    icon: Icons.group,
+                  ),
+                ],
+              ),
+              BoxDash(
+                Text1: "Growth monitoring",
+                Text2: "weght:",
+                Text3: "height:",
+                color: Colors.green,
+                icon: Icons.email,
+              ),
+            ],
+          ),
         ),
+        bottomNavigationBar: SalomonBottomBar(
+            currentIndex: _selectedIndex,
+            selectedItemColor: const Color(0xff6200ee),
+            unselectedItemColor: const Color(0xff757575),
+            onTap: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            items: _navBarItems),
       ),
     );
   }
