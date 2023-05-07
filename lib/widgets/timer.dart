@@ -97,19 +97,19 @@ class _timerClockState extends State<timerClock> {
   decoration: BoxDecoration(
     color:Color.fromARGB(255, 15, 53, 143),
     shape: BoxShape.circle,
-    border: Border.all(width: 10, color: Color.fromARGB(255, 255, 255, 255)),
+    border: Border.all(width: 10, color:isRunning? Colors.red:  Color.fromARGB(255, 255, 255, 255)),
   ),
   child: Column(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      Icon(Icons.mic, size: 60,color: Colors.white,),
+      Icon(Icons.mic, size: 60,color:isRunning? Colors.red: Colors.white,),
       Text(
         '$minutes:$seconds',
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 60,color: Colors.white),
       ),
       Text( isRunning?
-        'Recording...':'Press START',
-        style: TextStyle(fontSize: 16,color: Colors.white),
+        'Recording...':'Click On Me To Start\n           Recording',
+        style: TextStyle(fontSize: 16,color: isRunning? Colors.red: Colors.white),
       ),
     ],
   ),

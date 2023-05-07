@@ -3,6 +3,7 @@ import 'package:tottracker/NEW_SCREENS/drag.dart';
 import 'package:tottracker/NEW_SCREENS/feedback_screen.dart';
 import 'package:tottracker/NEW_SCREENS/help_screen.dart';
 import 'package:tottracker/NEW_SCREENS/invite_friend_screen.dart';
+import 'package:tottracker/NEW_SCREENS/monitoring_screen.dart';
 import 'package:tottracker/NEW_SCREENS/profile_screen.dart';
 import 'package:tottracker/api/auth_repositry.dart';
 
@@ -70,6 +71,16 @@ class AppDrawer extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ArrowWidget(),
+                          ));
+              }),
+          ListTile(
+              leading: Icon(Icons.group),
+              title: Text('Manage Bracelets'),
+              onTap: () {
+                Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DashScreen(),
                           ));
               }),
           

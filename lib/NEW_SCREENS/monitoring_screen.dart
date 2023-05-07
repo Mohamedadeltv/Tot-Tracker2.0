@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tottracker/NEW_SCREENS/baby_cry_analyzer_screen.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/providers/profile_controller.dart';
 import '../providers/user.dart' as U;
@@ -162,6 +163,23 @@ class DashScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BabyCryAnalyzerScreen(),
+          ),
+        );
+      },
+      child:  BoxDash(
+                Text1: "Status",
+                Text2: "Baby Crying Analyzer",
+                Text3: "",
+                color: Colors.red,
+                icon: Icons.mic,
+              ),
+            ),
             BoxDash(
               Text1: "Status",
               Text2: "Sleeping",
