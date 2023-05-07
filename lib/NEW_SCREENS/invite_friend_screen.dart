@@ -2,6 +2,7 @@ import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import '../custom_drawer/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+
 class InviteFriend extends StatefulWidget {
   static const routeName = '/invitefriendscreen';
 
@@ -32,30 +33,22 @@ class _InviteFriendState extends State<InviteFriend> {
           top: false,
           child: Scaffold(
             appBar: AppBar(
-              flexibleSpace: Container(
-                decoration:
-                    BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
-              ),
-              centerTitle: true,
-              title: const Center(
-                child: Text(
-                  'Invite A Friend',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                automaticallyImplyLeading: false,
+                flexibleSpace: Container(
+                  decoration:
+                      BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
+                ),
+                centerTitle: true,
+                title: const Center(
+                  child: Text(
+                    'Invite A Friend',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => FeaturesOverviewScreen()));
-                },
-              ),
-            ),
+                leading: null),
             backgroundColor:
                 isLightMode ? AppTheme.white : AppTheme.nearlyBlack,
             body: Column(
@@ -118,7 +111,7 @@ class _InviteFriendState extends State<InviteFriend> {
                               onTap: () {
                                 String text =
                                     'Check out this cool app! Invitation link: <insert your invitation link here>';
-                               Share.share(text);
+                                Share.share(text);
                               },
                               child: Center(
                                 child: Row(
