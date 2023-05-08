@@ -5,11 +5,15 @@ class MYB extends StatelessWidget {
   final Color text_color;
   //final Color background_color;
   final Function() ontap;
+  final size;
+  final height;
+  final fontsize;
   MYB(
       { //required this.background_color,
       required this.text,
       required this.ontap,
-      required this.text_color});
+      required this.text_color,
+      this.size,this.fontsize,this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class MYB extends StatelessWidget {
         padding: EdgeInsets.all(16),
         // margin: EdgeInsets.all(10),
         height: 57,
-        width: 157,
+        width: size,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             gradient:
@@ -31,7 +35,7 @@ class MYB extends StatelessWidget {
           // textWidthBasis: TextWidthBasis.longestLine,
           // textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 20,
+              fontSize: 19,
               color: text_color,
               fontFamily: 'Silom',
               fontWeight: FontWeight.bold),

@@ -20,20 +20,7 @@ class _BraceletsListState extends State<BraceletsList> {
                   .snapshots();
     return Column(
       children: [
-        SizedBox(height: 10),
-        Container(
-          width: double.infinity,
-          height: 40,
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(4.0)),
-          child: TextField(
-            decoration: InputDecoration(
-                hintText: 'Search for something',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.close))),
-          ),
-        ),        SizedBox(height: 10),
+     
 
         Flexible(
           child: Container(

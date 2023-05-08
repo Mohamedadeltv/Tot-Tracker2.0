@@ -72,30 +72,21 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         child: SafeArea(
           top: false,
           child: Scaffold(
-            appBar: AppBar(
-                automaticallyImplyLeading: false,
-                flexibleSpace: Container(
-                  decoration:
-                      BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
-                ),
-                centerTitle: true,
-                title: const Center(
-                  child: Text(
-                    'Feedback',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                leading: null),
+
             backgroundColor:
                 isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
             body: SingleChildScrollView(
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: Column(
-                  children: <Widget>[
+                  children: <Widget>[SizedBox(
+                height: 50,
+              ),
+              Container(
+                width: 100,
+                height: 100,
+                child: Image.asset('assets/drawables/tottracker4.png'),
+              ),
                     Container(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).padding.top,

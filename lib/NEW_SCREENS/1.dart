@@ -5,6 +5,8 @@ import 'package:tottracker/NEW_SCREENS/profile_screen.dart';
 
 import '../custom_drawer/drawer_user_controller.dart';
 import '../custom_drawer/home_drawer.dart';
+import 'aboutus.dart';
+import 'drag.dart';
 import 'feedback_screen.dart';
 import 'help_screen.dart';
 import 'invite_friend_screen.dart';
@@ -50,11 +52,6 @@ class _BeginningScreenState extends State<BeginningScreen> {
             screenView = InviteFriend();
           });
           break;
-        case DrawerIndex.Invite:
-          setState(() {
-            screenView = InviteFriend();
-          });
-          break;
         case DrawerIndex.Profile:
           setState(() {
             screenView = ProfileScreens();
@@ -67,7 +64,12 @@ class _BeginningScreenState extends State<BeginningScreen> {
           break;
         case DrawerIndex.ManageBracelet:
           setState(() {
-            screenView = BraceletsList();
+            screenView = ArrowWidget();
+          });
+          break;
+        case DrawerIndex.About:
+          setState(() {
+            screenView = AboutUsPage();
           });
           break;
         default:

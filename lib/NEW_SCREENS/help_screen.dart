@@ -1,9 +1,10 @@
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
+import 'package:tottracker/NEW_WIDGETS/button.dart';
 import '../custom_drawer/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class HelpScreen extends StatefulWidget {
-    static const routeName = '/helpscreen';
+  static const routeName = '/helpscreen';
 
   @override
   _HelpScreenState createState() => _HelpScreenState();
@@ -31,26 +32,18 @@ class _HelpScreenState extends State<HelpScreen> {
         child: SafeArea(
           top: false,
           child: Scaffold(
-             appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(color: Color.fromARGB(255, 15, 53, 143)),
-          ),
-          centerTitle: true,
-          title: const Center(
-            child: Text(
-              'Help',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          leading: null
-        ),
             backgroundColor:
                 isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
             body: Column(
               children: <Widget>[
+                SizedBox(
+                  height: 50,
+                ),
+                Container(
+                  width: 100,
+                  height: 100,
+                  child: Image.asset('assets/drawables/tottracker4.png'),
+                ),
                 Container(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).padding.top,
@@ -77,47 +70,12 @@ class _HelpScreenState extends State<HelpScreen> {
                         fontSize: 16,
                         color: isLightMode ? Colors.black : Colors.white),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Container(
-                        width: 140,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: isLightMode ? Colors.blue : Colors.white,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(4.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.6),
-                                offset: const Offset(4, 4),
-                                blurRadius: 8.0),
-                          ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  'Chat with Us',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color:
-                                        isLightMode ? Colors.white : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                ),SizedBox(height: 20.0,),
+                MYB(
+                  text: "Chat With US",
+                  size: 250.0,
+                  ontap: () {},
+                  text_color: Color.fromARGB(255, 210, 210, 205),
                 )
               ],
             ),

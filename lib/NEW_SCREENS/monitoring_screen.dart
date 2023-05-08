@@ -172,7 +172,7 @@ class DashScreen extends StatefulWidget {
 }
 
 class _DashScreenState extends State<DashScreen> {
-   Widget? screenView;
+  Widget? screenView;
   DrawerIndex? drawerIndex;
 
   @override
@@ -181,10 +181,11 @@ class _DashScreenState extends State<DashScreen> {
     screenView = const DashScreen();
     super.initState();
   }
+
   var _showOnlyFavorites = false;
   int _selectedIndex = 0;
   late final List<Widget> _pages;
-  _FeaturesOverviewScreenState() {
+  _DashScreenState() {
     _pages = [
       DashScreen(),
       ProfileScreens(),
@@ -211,7 +212,14 @@ class _DashScreenState extends State<DashScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 85,),
+              SizedBox(
+                height: 50,
+              ),
+              Container(
+                width: 100,
+                height: 100,
+                child: Image.asset('assets/drawables/tottracker4.png'),
+              ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tottracker/NEW_SCREENS/bracelet_screen.dart';
+import '../NEW_WIDGETS/button.dart';
 import 'braceletlist.dart';
 
 class ArrowWidget extends StatefulWidget {
@@ -21,30 +22,32 @@ class _ArrowWidgetState extends State<ArrowWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Bracelet List'),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Card(
-              margin: EdgeInsets.all(15),
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Bracelet List',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Spacer(),
-                    ElevatedButton(
-                        onPressed: _toggleNewWidget,
-                        child: Text(
-                            _showNewWidget ? 'Cancel' : 'Add a new Bracelet'))
-                  ],
-                ),
+            SizedBox(
+              height: 50,
+            ),
+            Container(
+              width: 100,
+              height: 100,
+              child: Image.asset('assets/drawables/tottracker4.png'),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  MYB(
+                    text: _showNewWidget ? 'Cancel' : 'Add Bracelet',
+                    ontap: _toggleNewWidget,
+                    text_color: Color.fromARGB(255, 210, 210, 205),
+                    size: 200.0,
+                  ),
+                ],
               ),
             ),
             if (_showNewWidget) // Only show this widget if _showNewWidget is true
@@ -58,10 +61,19 @@ class _ArrowWidgetState extends State<ArrowWidget> {
               padding: EdgeInsets.all(5),
               child: Container(
                 decoration: BoxDecoration(
+                  gradient: SweepGradient(
+                    colors: [
+                      Color(0xff9a3a51),
+                      Color(0xff1c69a2),
+                    ],
+                    center: Alignment.center,
+                    startAngle: 0.0,
+                    endAngle: 2 * 3.14,
+                  ),
                   color: Colors.white,
                   border: Border.all(
                     color: Colors.black,
-                    width: 1.0,
+                    width: 3.0,
                   ),
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [

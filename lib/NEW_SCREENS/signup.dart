@@ -661,9 +661,11 @@ class _signupState extends State<signup> {
               ),
             ),
             MYB(
-                text: "SIGN UP",
-                text_color: Color.fromARGB(255, 210, 210, 205),
-                ontap: _saveForm)
+              text: "SIGN UP",
+              text_color: Color.fromARGB(255, 210, 210, 205),
+              ontap: _saveForm,
+              size: 157.0,
+            )
           ],
         ),
       ),
