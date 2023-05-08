@@ -52,6 +52,7 @@ dependencies:
   dependencies:
   share: ^2.0.4
   share_plus: ^6.3.4
+  url_launcher: ^6.1.10
   
   
 

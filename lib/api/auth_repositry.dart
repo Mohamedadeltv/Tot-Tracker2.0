@@ -4,7 +4,10 @@ import 'package:get/get.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_SCREENS/first_screen.dart';
 import 'package:tottracker/NEW_SCREENS/main_screen.dart';
+import 'package:tottracker/NEW_SCREENS/monitoring_screen.dart';
 import 'package:tottracker/models/signup_email_password_failure.dart';
+
+import '../NEW_SCREENS/1.dart';
 
 class AuthenticationRepositry extends GetxController {
   static AuthenticationRepositry get instance => Get.find();
@@ -23,7 +26,7 @@ class AuthenticationRepositry extends GetxController {
   _setInitialScreen(User? user) {
     user == null
         ? Get.offAll(() => const FirstScreen())
-        : Get.offAll(() => const FeaturesOverviewScreen());
+        : Get.offAll(() => const BeginningScreen());
   }
 
   dialog(String error) {
@@ -50,7 +53,7 @@ class AuthenticationRepositry extends GetxController {
           email: email, password: password);
       firebaseUser.value == null
           ? Get.offAll(() => const MainScreen())
-          : Get.offAll(() => const FeaturesOverviewScreen());
+          : Get.offAll(() => const BeginningScreen());
     } on FirebaseAuthException catch (e) {
       final ex = SignUpWithEmailAndPasswordFailure.code(e.code);
       dialog(ex.message);

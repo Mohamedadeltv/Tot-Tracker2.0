@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:tottracker/NEW_SCREENS/app_drawer.dart';
-import 'package:tottracker/NEW_SCREENS/feedback_screen.dart';
-import 'package:tottracker/NEW_SCREENS/invite_friend_screen.dart';
 import 'package:tottracker/NEW_SCREENS/profile_screen.dart';
 import 'package:tottracker/widgets/features_grid.dart';
 
@@ -16,16 +14,6 @@ final _navBarItems = [
     icon: const Icon(Icons.home),
     title: const Text("Home"),
     selectedColor: Colors.purple,
-  ),
-  SalomonBottomBarItem(
-    icon: const Icon(Icons.favorite_border),
-    title: const Text("Likes"),
-    selectedColor: Colors.pink,
-  ),
-  SalomonBottomBarItem(
-    icon: const Icon(Icons.search),
-    title: const Text("Search"),
-    selectedColor: Colors.orange,
   ),
   SalomonBottomBarItem(
     icon: const Icon(Icons.person),
@@ -49,8 +37,7 @@ class _FeaturesOverviewScreenState extends State<FeaturesOverviewScreen> {
   _FeaturesOverviewScreenState() {
     _pages = [
       FeaturesGrid(_showOnlyFavorites),
-      FeedbackScreen(),
-      InviteFriend(),
+
       ProfileScreens(),
     ];
   }
@@ -71,7 +58,7 @@ class _FeaturesOverviewScreenState extends State<FeaturesOverviewScreen> {
           return false;
         }
       },
-      child:  Scaffold(
+      child: Scaffold(
         backgroundColor: Color.fromARGB(255, 228, 224, 224),
         appBar: _selectedIndex == 0
             ? AppBar(
@@ -113,19 +100,16 @@ class _FeaturesOverviewScreenState extends State<FeaturesOverviewScreen> {
         drawer: AppDrawer(),
         body: _pages[_selectedIndex],
         bottomNavigationBar: SalomonBottomBar(
-              currentIndex: _selectedIndex,
-              selectedItemColor: const Color(0xff6200ee),
-              unselectedItemColor: const Color(0xff757575),
-              onTap: (index) {
-               
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                
-              },
-              items: _navBarItems),
-        ),
-      
+            currentIndex: _selectedIndex,
+            selectedItemColor: const Color(0xff6200ee),
+            unselectedItemColor: const Color(0xff757575),
+            onTap: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            items: _navBarItems),
+      ),
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../NEW_WIDGETS/button.dart';
+
 class BraceletForm extends StatefulWidget {
   final Function() toggle;
   BraceletForm(this.toggle);
@@ -79,12 +81,14 @@ class _BraceletFormState extends State<BraceletForm> {
               decoration: InputDecoration(
                 labelText: 'Bracelet Code',
                 labelStyle: TextStyle(
-                  color: Colors.grey[700],
+                  color:Color(0xff1c69a2),
                   fontWeight: FontWeight.bold,
                 ),
                 border: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 7, 56, 94),
+                  ),
                 ),
               ),
               validator: (value) {
@@ -102,12 +106,12 @@ class _BraceletFormState extends State<BraceletForm> {
               decoration: InputDecoration(
                 labelText: 'Baby Name',
                 labelStyle: TextStyle(
-                  color: Colors.grey[700],
+                  color:Color(0xff9a3a51),
                   fontWeight: FontWeight.bold,
                 ),
                 border: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
+                  borderSide: BorderSide(color:Color(0xff9a3a51),),
                 ),
               ),
               validator: (value) {
@@ -121,19 +125,12 @@ class _BraceletFormState extends State<BraceletForm> {
               },
             ),
             SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _submitForm,
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  onPrimary: Colors.white,
-                  textStyle: TextStyle(
-                    fontSize: 20,
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: Text('Add Bracelet'),
+            Center(
+              child: MYB(
+                text: 'Add Bracelet',
+                ontap: _submitForm,
+                text_color: Color.fromARGB(255, 210, 210, 205),
+                size: 250.0,
               ),
             ),
           ],

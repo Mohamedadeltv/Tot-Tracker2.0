@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../api/auth_repositry.dart';
 import 'app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +22,11 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
+  late Future<String> _profileImageFuture;
+
   List<DrawerList>? drawerList;
+  late ImageProvider imageProvider;
+
   @override
   void initState() {
     setDrawerListArray();
@@ -33,10 +41,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
         icon: Icon(Icons.home),
       ),
       DrawerList(
+        index: DrawerIndex.Profile,
+        labelName: 'Profile',
+        icon: Icon(Icons.person),
+      ),
+      DrawerList(
+        index: DrawerIndex.ManageBracelet,
+        labelName: 'Manage Bracelets',
+        icon: Icon(Icons.barcode_reader),
+      ),
+      DrawerList(
         index: DrawerIndex.Help,
+         icon: Icon(Icons.shop),
         labelName: 'Help',
-        isAssetsImage: true,
-        imageName: 'assets/drawables/babysleep.png',
       ),
       DrawerList(
         index: DrawerIndex.FeedBack,
@@ -61,10 +78,45 @@ class _HomeDrawerState extends State<HomeDrawer> {
     ];
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isLightMode = brightness == Brightness.light;
+    final user = FirebaseAuth.instance.currentUser;
+    final nameFuture = FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: user!.email)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.size > 0) {
+        // Assuming that the name is stored in a field called "name"
+        String name = querySnapshot.docs[0].get('name');
+        return name;
+      } else {
+        return '';
+      }
+    }).catchError((error) {
+      return '';
+    });
+    final userProfileFuture = FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: user!.email)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.size > 0) {
+        // Assuming that the name is stored in a field called "name"
+        String name = querySnapshot.docs[0].get('name');
+        // Assuming that the image URL is stored in a field called "profile_picture_url"
+        String imageUrl = querySnapshot.docs[0].get('profile_picture_url');
+        return {'name': name, 'imageUrl': imageUrl};
+      } else {
+        return {'name': '', 'imageUrl': ''};
+      }
+    }).catchError((error) {
+      return {'name': '', 'imageUrl': ''};
+    });
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,10 +157,32 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                     blurRadius: 8),
                               ],
                             ),
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.asset('assets/drawables/babysleep.png'),
+                            child: FutureBuilder<Map<String, String>>(
+                              future: userProfileFuture,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Icon(Icons.error);
+                                } else {
+                                  String imageUrl = snapshot.data!['imageUrl']!;
+                                  return ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(60.0),
+                                    ),
+                                    child: Image(
+                                      image: imageUrl.isNotEmpty
+                                          ? NetworkImage(imageUrl)
+                                              as ImageProvider<Object>
+                                          : AssetImage(
+                                              'assets/drawables/blank-profile-picture-973460_1280.webp',
+                                            ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                }
+                              },
                             ),
                           ),
                         ),
@@ -116,16 +190,29 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     },
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 4),
-                    child: Text(
-                      'Chris Hemsworth',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: isLightMode ? AppTheme.grey : AppTheme.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
+                      padding: const EdgeInsets.only(top: 8, left: 4),
+                      child: FutureBuilder<String>(
+                          future: nameFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error loading user name');
+                            } else {
+                              String name = snapshot.data ?? '';
+                              return Text(
+                                name,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: isLightMode
+                                      ? AppTheme.grey
+                                      : AppTheme.white,
+                                  fontSize: 18,
+                                ),
+                              );
+                            }
+                          }))
                 ],
               ),
             ),
@@ -169,7 +256,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   color: Colors.red,
                 ),
                 onTap: () {
-                  onTapped();
+                  AuthenticationRepositry.instance.logOut();
                 },
               ),
               SizedBox(
@@ -301,6 +388,8 @@ enum DrawerIndex {
   About,
   Invite,
   Testing,
+  ManageBracelet,
+  Profile,
 }
 
 class DrawerList {
