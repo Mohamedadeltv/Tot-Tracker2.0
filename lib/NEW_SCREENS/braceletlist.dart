@@ -9,19 +9,20 @@ class BraceletsList extends StatefulWidget {
 
 class _BraceletsListState extends State<BraceletsList> {
   final user = FirebaseAuth.instance.currentUser;
-  
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final query1=FirebaseFirestore.instance
-                  .collection('Bracelets')
-                  .where('users', arrayContains: user?.email)
-                  .orderBy('timestamp', descending: true)
-                  .snapshots();
+    final query1 = FirebaseFirestore.instance
+        .collection('Bracelets')
+        .where('users', arrayContains: user?.email)
+        .orderBy('timestamp', descending: true)
+        .snapshots();
     return Column(
       children: [
-     
-
+        SizedBox(
+          height: 20,
+        ),
         Flexible(
           child: Container(
             child: StreamBuilder<QuerySnapshot>(
@@ -155,7 +156,8 @@ class _BraceletsListState extends State<BraceletsList> {
                                     ),
                                     actions: <Widget>[
                                       OutlinedButton(
-                                        onPressed: () => Navigator.of(ctx).pop(),
+                                        onPressed: () =>
+                                            Navigator.of(ctx).pop(),
                                         child: Text('Cancel'),
                                       ),
                                       OutlinedButton(

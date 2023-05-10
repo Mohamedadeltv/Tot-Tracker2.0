@@ -49,14 +49,20 @@ class _ArrowWidgetState extends State<ArrowWidget> {
                   ),
                 ],
               ),
-            ),
+            ),            
             if (_showNewWidget) // Only show this widget if _showNewWidget is true
-              SizedBox(
-                  height: 270,
-                  width: double.infinity,
-                  child: BraceletForm(
-                    _toggleNewWidget,
-                  )),
+              Column(
+                children: [
+                  SizedBox(
+                      height: 270,
+                      width: double.infinity,
+                      child: BraceletForm(
+                        _toggleNewWidget,
+                      )),SizedBox(
+              height: 50,
+            ),
+                ],
+              ),
             Padding(
               padding: EdgeInsets.all(5),
               child: Container(

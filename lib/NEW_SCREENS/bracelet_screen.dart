@@ -71,71 +71,103 @@ class _BraceletFormState extends State<BraceletForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Bracelet Code',
-                labelStyle: TextStyle(
-                  color:Color(0xff1c69a2),
-                  fontWeight: FontWeight.bold,
-                ),
-                border: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 7, 56, 94),
+    return SingleChildScrollView(
+      child: Column(children: [
+        Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Bracelet Code',
+                  labelStyle: TextStyle(
+                    color: Color(0xff1c69a2),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 7, 56, 94),
+                    ),
                   ),
                 ),
+                validator: (value) {
+                  if (value.toString().isEmpty) {
+                    return 'Please enter a bracelet code';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _braceletCode = value!;
+                },
               ),
-              validator: (value) {
-                if (value.toString().isEmpty) {
-                  return 'Please enter a bracelet code';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _braceletCode = value!;
-              },
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Baby Name',
-                labelStyle: TextStyle(
-                  color:Color(0xff9a3a51),
-                  fontWeight: FontWeight.bold,
+              SizedBox(height: 20),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Baby Name',
+                  labelStyle: TextStyle(
+                    color: Color(0xff9a3a51),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xff9a3a51),
+                    ),
+                  ),
                 ),
-                border: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color:Color(0xff9a3a51),),
+                validator: (value) {
+                  if (value.toString().isEmpty) {
+                    return 'Please enter the baby name';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _babyName = value!;
+                },
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Baby Username',
+                  labelStyle: TextStyle(
+                    color: Color(0xff9a3a51),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xff9a3a51),
+                    ),
+                  ),
+                ),
+                validator: (value) {
+                  if (value.toString().isEmpty) {
+                    return 'Please enter the baby name';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _babyName = value!;
+                },
+              ),
+              SizedBox(height: 10),
+              Center(
+                child: MYB(
+                  text: 'Add Bracelet',
+                  ontap: _submitForm,
+                  text_color: Color.fromARGB(255, 210, 210, 205),
+                  size: 250.0,
                 ),
               ),
-              validator: (value) {
-                if (value.toString().isEmpty) {
-                  return 'Please enter the baby name';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _babyName = value!;
-              },
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: MYB(
-                text: 'Add Bracelet',
-                ontap: _submitForm,
-                text_color: Color.fromARGB(255, 210, 210, 205),
-                size: 250.0,
+              SizedBox(
+                height: 50,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    ]);
+      ]),
+    );
   }
 }

@@ -335,7 +335,7 @@ class ProfileScreensState extends State<ProfileScreens> {
                             ),
                             Stack(children: [
                               CircleAvatar(
-                                backgroundColor:  Color(0xff1c69a2),
+                                backgroundColor: Color(0xff1c69a2),
                                 minRadius: 86.0,
                                 child: CircleAvatar(
                                     radius: 80.0,
@@ -349,7 +349,7 @@ class ProfileScreensState extends State<ProfileScreens> {
                                     width: 35,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
-                                      color:Color(0xff9a3a51),
+                                      color: Color(0xff9a3a51),
                                     ),
                                     child: PopupMenuButton(
                                       onSelected:
@@ -456,7 +456,7 @@ class ProfileScreensState extends State<ProfileScreens> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                           MYB(
+                                      MYB(
                                         text: "Cancel",
                                         text_color:
                                             Color.fromARGB(255, 210, 210, 205),
