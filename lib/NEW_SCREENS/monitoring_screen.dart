@@ -20,6 +20,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:flutter/material.dart';
 
+import '../sleep_screen/detail_screen.dart';
+
 class BoxDash extends StatelessWidget {
   final String Text1;
   final String Text2;
@@ -237,12 +239,22 @@ class _DashScreenState extends State<DashScreen> {
                   icon: Icons.mic,
                 ),
               ),
-              BoxDash(
-                Text1: "Status",
-                Text2: "Sleeping",
-                Text3: "",
-                color: Colors.blueAccent,
-                icon: Icons.offline_pin,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailScreen(),
+                    ),
+                  );
+                },
+                child: BoxDash(
+                  Text1: "Status",
+                  Text2: "Sleeping",
+                  Text3: "",
+                  color: Colors.blueAccent,
+                  icon: Icons.offline_pin,
+                ),
               ),
               Row(
                 children: [
@@ -270,7 +282,6 @@ class _DashScreenState extends State<DashScreen> {
             ],
           ),
         ),
-        
       ),
     );
   }

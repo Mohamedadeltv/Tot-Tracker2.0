@@ -74,6 +74,7 @@ dependencies:
   intl_phone_number_input: ^0.7.1
   material_design_icons_flutter: ^2.3.50
   charts_flutter: ^0.12.0
+  google_fonts: ^4.0.4
 
 dev_dependencies:
   flutter_test:
