@@ -53,8 +53,9 @@ dependencies:
   share: ^2.0.4
   share_plus: ^6.3.4
   url_launcher: ^6.1.10
-  
-  
+  lucide_icons: ^0.115.0
+  go_router: ^6.0.9
+  flutter_bloc: ^8.1.2  
 
 
 

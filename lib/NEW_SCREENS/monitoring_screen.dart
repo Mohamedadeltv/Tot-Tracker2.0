@@ -270,16 +270,7 @@ class _DashScreenState extends State<DashScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: SalomonBottomBar(
-            currentIndex: _selectedIndex,
-            selectedItemColor: const Color(0xff6200ee),
-            unselectedItemColor: const Color(0xff757575),
-            onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            items: _navBarItems),
+        
       ),
     );
   }
