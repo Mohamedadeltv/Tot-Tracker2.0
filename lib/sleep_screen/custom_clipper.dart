@@ -35,22 +35,22 @@ class MyCustomClipper extends CustomClipper<Path> {
     var secondControlPoint = new Offset(size.width / 4, size.height / 1.45);
     var secondEndPoint = new Offset(0, size.height / 1.75);
 
-    path.quadraticBezierTo(
-        firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
 
-    path.quadraticBezierTo(
-        secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
 
     path.lineTo(0, size.height / 1.75);
   }
 
   createBottom(Size size, Path path) {
-    path.lineTo(0, size.height / 1.19);
+    path.lineTo(0, size.height / 1.45);
     var secondControlPoint = new Offset((size.width / 2), size.height);
-    var secondEndPoint = new Offset(size.width, size.height / 1.19);
+    var secondEndPoint = new Offset(size.width, size.height / 1.45);
 
-    path.quadraticBezierTo(
-        secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
     path.lineTo(size.width, 0);
   }
 
@@ -58,8 +58,8 @@ class MyCustomClipper extends CustomClipper<Path> {
     path.lineTo(size.width / 2, 0);
     var firstControlPoint = new Offset(size.width / 1.10, size.height / 2);
     var firstEndPoint = new Offset(size.width / 2, size.height);
-    path.quadraticBezierTo(
-        firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
     path.lineTo(0, size.height);
   }
 
@@ -73,7 +73,9 @@ class MyCustomClipper extends CustomClipper<Path> {
     var increment = size.width / 40;
     while (curXPos < size.width) {
       curXPos += increment;
-      curYPos = curYPos == size.height ? size.height - rnd.nextInt(50 - 0) : size.height;
+      curYPos = curYPos == size.height
+          ? size.height - rnd.nextInt(50 - 0)
+          : size.height;
       path.lineTo(curXPos, curYPos);
     }
     path.lineTo(size.width, 0);

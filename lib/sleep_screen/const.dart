@@ -35,23 +35,6 @@ class Constants {
   // Orange
   static Color darkOrange = Color(0xFFFFB74D);
 
-  static ThemeData lighTheme(BuildContext context) {
-    return ThemeData(
-      backgroundColor: lightBackground,
-      primaryColor: lightPrimary,
-      accentColor: lightAccent,
-      buttonColor: lightAccent,
-      scaffoldBackgroundColor: lightBackground,
-      textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
-      appBarTheme: AppBarTheme(
-        textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
-        iconTheme: IconThemeData(
-          color: lightAccent,
-        ),
-      ),
-    );
-  }
-
   static double headerHeight = 228.5;
   static double paddingSide = 30.0;
 }

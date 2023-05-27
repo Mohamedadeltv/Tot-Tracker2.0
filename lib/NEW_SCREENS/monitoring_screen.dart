@@ -20,6 +20,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:flutter/material.dart';
 
+import '../sleep_screen/const.dart';
+import '../sleep_screen/custom_clipper.dart';
 import '../sleep_screen/detail_screen.dart';
 
 class BoxDash extends StatelessWidget {
@@ -196,6 +198,15 @@ class _DashScreenState extends State<DashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double statusBarHeight = MediaQuery.of(context).padding.top;
+    double _crossAxisSpacing = 16, _mainAxisSpacing = 16, _cellHeight = 150.0;
+    int _crossAxisCount = 2;
+
+    double _width = (MediaQuery.of(context).size.width -
+            ((_crossAxisCount - 1) * _crossAxisSpacing)) /
+        _crossAxisCount;
+    double _aspectRatio =
+        _width / (_cellHeight + _mainAxisSpacing + (_crossAxisCount + 1));
     return WillPopScope(
       onWillPop: () async {
         // Handle the back button press manually
@@ -211,77 +222,116 @@ class _DashScreenState extends State<DashScreen> {
         }
       },
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 50,
-              ),
-              Container(
-                width: 100,
-                height: 100,
-                child: Image.asset('assets/drawables/tottracker4.png'),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BabyCryAnalyzerScreen(),
-                    ),
-                  );
-                },
-                child: BoxDash(
-                  Text1: "Status",
-                  Text2: "Baby Crying Analyzer",
-                  Text3: "",
-                  color: Colors.red,
-                  icon: Icons.mic,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailScreen(),
-                    ),
-                  );
-                },
-                child: BoxDash(
-                  Text1: "Status",
-                  Text2: "Sleeping",
-                  Text3: "",
-                  color: Colors.blueAccent,
-                  icon: Icons.offline_pin,
-                ),
-              ),
-              Row(
-                children: [
-                  RowCard(
-                    Text1: "Blood Pressure",
-                    Text2: "50",
-                    color: Colors.orange,
-                    icon: Icons.send,
-                  ),
-                  RowCard(
-                    Text1: "Temperature",
-                    Text2: "37",
-                    color: Colors.grey,
-                    icon: Icons.group,
-                  ),
-                ],
-              ),
-              BoxDash(
-                Text1: "Growth monitoring",
-                Text2: "weght:",
-                Text3: "height:",
-                color: Colors.green,
-                icon: Icons.email,
-              ),
-            ],
+        body: Stack(children: <Widget>[
+          ClipPath(
+            clipper: MyCustomClipper(clipType: ClipType.bottom),
+            child: Container(
+              color: Constants.lightBlue,
+              height: Constants.headerHeight + statusBarHeight,
+            ),
           ),
-        ),
+          Positioned(
+            left: 30,
+            top: 80,
+            child: Text(
+              "TotTracker",
+              style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white),
+            ),
+          ),
+          Positioned(
+            right: -45,
+            top: -30,
+            child: ClipOval(
+              child: Container(
+                color: Colors.black.withOpacity(0.05),
+                height: 220,
+                width: 220,
+              ),
+            ),
+          ),
+          Positioned(
+            right: 20,
+            top: 50,
+            child: Container(
+              height: 120,
+              width: 120,
+              child: Image(
+                  image: AssetImage('assets/drawables/tottracker4.png'),
+                  height: 200,
+                  width: 200,
+                  color: Colors.white.withOpacity(1)),
+            ),
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 180,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BabyCryAnalyzerScreen(),
+                      ),
+                    );
+                  },
+                  child: BoxDash(
+                    Text1: "",
+                    Text2: "Baby Crying Analyzer",
+                    Text3: "",
+                    color: Colors.red,
+                    icon: Icons.mic,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailScreen(),
+                      ),
+                    );
+                  },
+                  child: BoxDash(
+                    Text1: "Status",
+                    Text2: "Sleeping",
+                    Text3: "",
+                    color: Colors.blueAccent,
+                    icon: Icons.offline_pin,
+                  ),
+                ),
+                Row(
+                  children: [
+                    RowCard(
+                      Text1: "Blood Pressure",
+                      Text2: "50",
+                      color: Colors.orange,
+                      icon: Icons.send,
+                    ),
+                    RowCard(
+                      Text1: "Temperature",
+                      Text2: "37",
+                      color: Colors.grey,
+                      icon: Icons.group,
+                    ),
+                  ],
+                ),
+                BoxDash(
+                  Text1: "Growth monitoring",
+                  Text2: "weght:",
+                  Text3: "height:",
+                  color: Colors.green,
+                  icon: Icons.email,
+                ),
+              ],
+            ),
+          ),
+        ]),
       ),
     );
   }

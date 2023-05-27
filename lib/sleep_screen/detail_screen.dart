@@ -43,13 +43,52 @@ class DetailScreen extends StatelessWidget {
               ),
             ),
           ),
-
+          Positioned(
+            left: 40,
+            top: 50,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Status",
+                  style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Sleeping",
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
+                      color: Constants.darkBlue),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 20,
+            top: 40,
+            child: Container(
+              height: 120,
+              width: 120,
+              child: Image(
+                  image: AssetImage('assets/drawables/tottracker4.png'),
+                  height: 200,
+                  width: 200,
+                  color: Colors.white.withOpacity(1)),
+            ),
+          ),
           // BODY
+          SizedBox(height: 80),
           Padding(
             padding: EdgeInsets.all(Constants.paddingSide),
             child: ListView(
               scrollDirection: Axis.vertical,
               children: <Widget>[
+                SizedBox(height: 100),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,39 +100,9 @@ class DetailScreen extends StatelessWidget {
                         // Back Button
 
                         SizedBox(width: 20),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Status",
-                              style: TextStyle(
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "Sleeping",
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w900,
-                                  color: Constants.darkBlue),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                     Spacer(),
-                    Container(
-                      height: 100,
-                      width: 100,
-                      child: Image(
-                          image: AssetImage('assets/drawables/tottracker4.png'),
-                          height: 200,
-                          width: 200,
-                          color: Colors.white.withOpacity(1)),
-                    ),
                   ],
                 ),
                 SizedBox(height: 30),
@@ -104,7 +113,7 @@ class DetailScreen extends StatelessWidget {
                   elevation: 10, borderRadius: new BorderRadius.circular(10.0),
                   child: Container(
                     padding: EdgeInsets.all(20.0),
-                    height: 300,
+                    height: 400,
                     child: Column(
                       children: <Widget>[
                         // Rest Active Legend
@@ -134,7 +143,7 @@ class DetailScreen extends StatelessWidget {
                         SizedBox(height: 20),
                         // Main Cards - Heartbeat and Blood Pressure
                         Container(
-                          height: 100,
+                          height: 150,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: <Widget>[
@@ -148,68 +157,79 @@ class DetailScreen extends StatelessWidget {
                                 value: 50,
                                 date: "5/12",
                                 isShowDate: false,
-                                key: Key("a"),
+                                key: Key("b"),
                               ),
                               ProgressVertical(
                                 value: 45,
                                 date: "5/13",
                                 isShowDate: false,
-                                key: Key("a"),
+                                key: Key("c"),
                               ),
                               ProgressVertical(
                                 value: 30,
                                 date: "5/14",
                                 isShowDate: true,
-                                key: Key("a"),
+                                key: Key("d"),
                               ),
                               ProgressVertical(
                                 value: 50,
                                 date: "5/15",
                                 isShowDate: false,
-                                key: Key("a"),
+                                key: Key("e"),
                               ),
                               ProgressVertical(
                                 value: 20,
                                 date: "5/16",
                                 isShowDate: false,
-                                key: Key("a"),
+                                key: Key("f"),
                               ),
                               ProgressVertical(
                                 value: 45,
                                 date: "5/17",
                                 isShowDate: true,
-                                key: Key("a"),
+                                key: Key("g"),
                               ),
                               ProgressVertical(
                                 value: 67,
                                 date: "5/18",
                                 isShowDate: false,
-                                key: Key("a"),
+                                key: Key("h"),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 40),
                         // Line Graph
-                        Expanded(
-                          child: Container(
-                              decoration: new BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                shape: BoxShape.rectangle,
-                                color: Constants.darkBlue,
-                              ),
-                              child: ClipPath(
-                                clipper: MyCustomClipper(
-                                    clipType: ClipType.multiple),
-                                child: Container(
-                                    decoration: new BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  shape: BoxShape.rectangle,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.all(10.0),
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
                                   color: Constants.lightBlue,
-                                )),
-                              )),
+                                  shape: BoxShape.circle),
+                            ),
+                            Text("Sleep"),
+                            Divider(
+                              color: Color.fromARGB(255, 230, 41,
+                                  41), // Customize the color if desired
+                              thickness:
+                                  1.0, // Customize the thickness if desired
+                              indent: 20.0, // Customize the indent if desired
+                              endIndent: 20.0,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                  color: Constants.darkBlue,
+                                  shape: BoxShape.circle),
+                            ),
+                            Text("Active"),
+                          ],
                         ),
                       ],
                     ),
@@ -232,13 +252,9 @@ class DetailScreen extends StatelessWidget {
                       switch (index) {
                         case 0:
                           return GridItem(
-                            status: "Rest",
+                            status: "Total Sleep",
                             time: "4h 45m",
-                            value: "76",
-                            unit: "avg bpm",
-                            color: Constants.darkGreen,
-                            image:
-                                AssetImage('assets/drawables/tottracker4.png'),
+                            icon: Icon(Icons.bed, color: Colors.blueAccent),
                             remarks: "ok",
                             key: Key("a"),
                           );
@@ -247,52 +263,12 @@ class DetailScreen extends StatelessWidget {
                           return GridItem(
                             status: "Active",
                             time: "30m",
-                            value: "82",
-                            unit: "avg bpm",
-                            color: Constants.darkOrange,
-                            image:
-                                AssetImage('assets/drawables/tottracker4.png'),
+                            icon: Icon(
+                              Icons.notifications_active_sharp,
+                              color: Colors.amber,
+                            ),
                             remarks: "ok",
                             key: Key("a"),
-                          );
-                          break;
-                        case 2:
-                          return GridItem(
-                            status: "Fitness Level",
-                            time: "",
-                            value: "82",
-                            unit: "avg bpm",
-                            color: Constants.darkOrange,
-                            image:
-                                AssetImage('assets/drawables/tottracker4.png'),
-                            remarks: "ok",
-                            key: Key("a"),
-                          );
-                          break;
-                        case 3:
-                          return GridItem(
-                            status: "Endurance",
-                            time: "",
-                            value: "82",
-                            unit: "avg bpm",
-                            color: Constants.darkOrange,
-                            image:
-                                AssetImage('assets/drawables/tottracker4.png'),
-                            remarks: "ok",
-                            key: Key("a"),
-                          );
-                          break;
-                        default:
-                          return GridItem(
-                            status: "Rest",
-                            time: "4h 45m",
-                            value: "76",
-                            unit: "avg bpm",
-                            image:
-                                AssetImage('assets/drawables/tottracker4.png'),
-                            remarks: "ok",
-                            key: Key("a"),
-                            color: Constants.darkOrange,
                           );
                           break;
                       }

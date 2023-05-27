@@ -4,21 +4,17 @@ import 'const.dart';
 class GridItem extends StatelessWidget {
   final String status;
   final String time;
-  final String value;
-  final String unit;
-  final ImageProvider image;
-  final Color color;
+
+  final Icon icon;
+
   final String remarks;
 
   GridItem({
     required Key key,
     required this.status,
-    required this.value,
-    required this.unit,
     required this.time,
-    required this.image,
+    required this.icon,
     required this.remarks,
-    required this.color,
   }) : super(key: key);
 
   @override
@@ -34,57 +30,34 @@ class GridItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   status,
-                  style: TextStyle(fontSize: 12, color: Constants.textPrimary),
-                ),
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(fontSize: 18, color: Constants.textPrimary),
                 ),
               ],
             ),
             SizedBox(height: 10),
-            (image == null)
-                ? Column(
-                    children: <Widget>[
-                      Text(
-                        value,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 35,
-                            color: color),
-                      ),
-                      Text(
-                        unit,
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Image(
-                        image: image,
-                        height: 50,
-                        width: 50,
-                      ),
-                      Text(
-                        remarks,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ],
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                icon,
+                Text(
+                  time,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
+                ),
+                Text(
+                  remarks,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ],
+            )
           ],
         ),
       ),
