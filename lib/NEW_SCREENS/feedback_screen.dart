@@ -72,21 +72,21 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         child: SafeArea(
           top: false,
           child: Scaffold(
-
             backgroundColor:
                 isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
             body: SingleChildScrollView(
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: Column(
-                  children: <Widget>[SizedBox(
-                height: 50,
-              ),
-              Container(
-                width: 100,
-                height: 100,
-                child: Image.asset('assets/drawables/tottracker4.png'),
-              ),
+                  children: <Widget>[
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 100,
+                      child: Image.asset('assets/drawables/tottracker4.png'),
+                    ),
                     Container(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).padding.top,
@@ -157,7 +157,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             ),
                           ),
                         ),
-                      ),
+                      ), 
                     )
                   ],
                 ),

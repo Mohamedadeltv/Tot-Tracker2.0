@@ -22,7 +22,8 @@ import 'package:get/get.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
- await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then((value) => Get.put(AuthenticationRepositry()));
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then((value) => Get.put(AuthenticationRepositry()));
   runApp(const MyApp());
 }
 
@@ -38,7 +39,6 @@ class MyApp extends StatelessWidget {
           //hna b-provide kol el child widgets be a Product class instance
           create: (ctx) => Features(),
         ),
-
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
