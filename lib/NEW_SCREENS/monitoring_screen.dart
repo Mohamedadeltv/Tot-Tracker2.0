@@ -7,6 +7,7 @@ import 'package:tottracker/NEW_SCREENS/app_drawer.dart';
 import 'package:tottracker/NEW_SCREENS/baby_cry_analyzer_screen.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_SCREENS/profile_screen.dart';
+import 'package:tottracker/api/audio.dart';
 import 'package:tottracker/custom_drawer/home_drawer.dart';
 import 'package:tottracker/providers/profile_controller.dart';
 import '../providers/user.dart' as U;
@@ -276,7 +277,7 @@ class _DashScreenState extends State<DashScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BabyCryAnalyzerScreen(),
+                        builder: (context) => MyHomePage(),
                       ),
                     );
                   },

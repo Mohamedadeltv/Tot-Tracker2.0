@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tottracker/NEW_SCREENS/baby_cry_analyzer_screen.dart';
+import 'package:tottracker/api/audio.dart';
 import '../providers/features.dart';
 
 class FeatureDetailScreen extends StatelessWidget {
@@ -18,7 +19,7 @@ class FeatureDetailScreen extends StatelessWidget {
         backgroundColor: Color.fromARGB(255, 15, 53, 143),
         title: Center(child: Text(loadedFeature.title )),
       ),
-      body:loadedFeature.id=='p1'? BabyCryAnalyzerScreen(): SingleChildScrollView(
+      body:loadedFeature.id=='p1'? MyHomePage(): SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
