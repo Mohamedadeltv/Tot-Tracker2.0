@@ -299,208 +299,210 @@ class ProfileScreensState extends State<ProfileScreens> {
           Navigator.of(context).pop();
           return false;
         },
-        child: Column(
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(_isEditingEnabled ? Icons.cancel : Icons.edit),
-                onPressed: () {
-                  setState(() {
-                    _isEditingEnabled = !_isEditingEnabled;
-                  });
-                },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 30,
               ),
-            ),
-            SingleChildScrollView(
-              child: Container(
-                child: FutureBuilder(
-                  future: controller.getUserData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        print("yessssssss");
-                        U.User userData = snapshot.data as U.User;
-                        TextEditingController nameController =
-                            TextEditingController(text: userData.name ?? '');
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                            Stack(children: [
-                              CircleAvatar(
-                                backgroundColor: Color(0xff1c69a2),
-                                minRadius: 86.0,
-                                child: CircleAvatar(
-                                    radius: 80.0,
-                                    backgroundImage: imageProvider),
-                              ),
-                              Positioned(
-                                  bottom: 0,
-                                  right: 140,
-                                  child: Container(
-                                    height: 35,
-                                    width: 35,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      color: Color(0xff9a3a51),
-                                    ),
-                                    child: PopupMenuButton(
-                                      onSelected:
-                                          (FilterOptions selectedValue) {
-                                        if (selectedValue ==
-                                            FilterOptions.Favorites) {
-                                          showModalBottomSheet(
-                                              context: context,
-                                              builder: (builder) =>
-                                                  bottomsheet());
-                                        } else {
-                                          imageProvider = AssetImage(
-                                              'assets/drawables/blank-profile-picture-973460_1280.webp');
-                                          FirebaseFirestore.instance
-                                              .collection('Users')
-                                              .where('email',
-                                                  isEqualTo: user!.email)
-                                              .get()
-                                              .then((querySnapshot) {
-                                            querySnapshot.docs.forEach((doc) {
-                                              setState(() {
-                                                doc.reference.update({
-                                                  'profile_picture_url':
-                                                      FieldValue.delete()
-                                                });
-                                              });
-                                            });
-                                          });
-                                        }
-                                      },
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                      itemBuilder: (_) => [
-                                        PopupMenuItem(
-                                          child: Text('Edit profile Picture'),
-                                          value: FilterOptions.Favorites,
-                                        ),
-                                        PopupMenuItem(
-                                          child: Text('Remove Profile Picture'),
-                                          value: FilterOptions.All,
-                                        ),
-                                      ],
-                                    ),
-                                  ))
-                            ]),
-                            Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 20),
-                                  buildEditableTextField(
-                                      "name",
-                                      userData.name ?? '',
-                                      Icon(Icons.person,
-                                          color: Color(0xff9a3a51)),
-                                      false,
-                                      () => _editField('name'),
-                                      _isEditingEnabled),
-                                  const SizedBox(height: 15),
-                                  buildEditableTextField(
-                                      "email",
-                                      userData.email ?? '',
-                                      Icon(Icons.email,
-                                          color: Color(0xff1c69a2)),
-                                      false,
-                                      () => _editField('email'),
-                                      _isEditingEnabled),
-                                  const SizedBox(height: 15),
-                                  buildEditableTextField(
-                                      "password",
-                                      userData.password ?? '',
-                                      Icon(Icons.lock,
-                                          color: Color(0xff9a3a51)),
-                                      true,
-                                      () => _editField('password'),
-                                      _isEditingEnabled),
-                                  const SizedBox(height: 15),
-                                  buildEditableTextField(
-                                      "gender",
-                                      userData.gender ?? '',
-                                      Icon(Icons.male,
-                                          color: Color(0xff1c69a2)),
-                                      false,
-                                      () => _editField('gender'),
-                                      _isEditingEnabled),
-                                  const SizedBox(height: 15),
-                                  buildEditableTextField(
-                                      "country",
-                                      userData.country ?? '',
-                                      Icon(Icons.countertops,
-                                          color: Color(0xff9a3a51)),
-                                      false,
-                                      () => _editField('country'),
-                                      _isEditingEnabled),
-                                  const SizedBox(height: 15),
-                                ],
-                              ),
-                            ),
-                            _isEditingEnabled
-                                ? Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      MYB(
-                                        text: "Cancel",
-                                        text_color:
-                                            Color.fromARGB(255, 210, 210, 205),
-                                        ontap: () {
-                                          setState(() {
-                                            _isEditingEnabled = false;
-                                          });
-                                        },
-                                        size: 150.0,
-                                      ),
-                                      MYB(
-                                        text: "Save",
-                                        text_color:
-                                            Color.fromARGB(255, 210, 210, 205),
-                                        ontap: () {
-                                          setState(() {
-                                            _isEditingEnabled = false;
-                                          });
-                                        },
-                                        size: 150.0,
-                                      ),
-                                    ],
-                                  )
-                                : SizedBox(),
-                          ],
-                        );
-                      } else if (snapshot.hasError) {
-                        print("no");
-                        print(
-                            "Error while fetching user data: ${snapshot.error}");
-                        return Center(child: Text(snapshot.error.toString()));
-                      } else {
-                        print("noooo");
-                        return const Center(
-                            child: Text("Something went wrong"));
-                      }
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(_isEditingEnabled ? Icons.cancel : Icons.edit),
+                  onPressed: () {
+                    setState(() {
+                      _isEditingEnabled = !_isEditingEnabled;
+                    });
                   },
                 ),
               ),
-            ),
-          ],
+              SingleChildScrollView(
+                child: Container(
+                  child: FutureBuilder(
+                    future: controller.getUserData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          print("yessssssss");
+                          U.User userData = snapshot.data as U.User;
+                          TextEditingController nameController =
+                              TextEditingController(text: userData.name ?? '');
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Stack(children: [
+                                CircleAvatar(
+                                  backgroundColor: Color(0xff1c69a2),
+                                  minRadius: 86.0,
+                                  child: CircleAvatar(
+                                      radius: 80.0,
+                                      backgroundImage: imageProvider),
+                                ),
+                                Positioned(
+                                    bottom: 0,
+                                    right: 140,
+                                    child: Container(
+                                      height: 35,
+                                      width: 35,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        color: Color(0xff9a3a51),
+                                      ),
+                                      child: PopupMenuButton(
+                                        onSelected:
+                                            (FilterOptions selectedValue) {
+                                          if (selectedValue ==
+                                              FilterOptions.Favorites) {
+                                            showModalBottomSheet(
+                                                context: context,
+                                                builder: (builder) =>
+                                                    bottomsheet());
+                                          } else {
+                                            imageProvider = AssetImage(
+                                                'assets/drawables/blank-profile-picture-973460_1280.webp');
+                                            FirebaseFirestore.instance
+                                                .collection('Users')
+                                                .where('email',
+                                                    isEqualTo: user!.email)
+                                                .get()
+                                                .then((querySnapshot) {
+                                              querySnapshot.docs.forEach((doc) {
+                                                setState(() {
+                                                  doc.reference.update({
+                                                    'profile_picture_url':
+                                                        FieldValue.delete()
+                                                  });
+                                                });
+                                              });
+                                            });
+                                          }
+                                        },
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                        itemBuilder: (_) => [
+                                          PopupMenuItem(
+                                            child: Text('Edit profile Picture'),
+                                            value: FilterOptions.Favorites,
+                                          ),
+                                          PopupMenuItem(
+                                            child: Text('Remove Profile Picture'),
+                                            value: FilterOptions.All,
+                                          ),
+                                        ],
+                                      ),
+                                    ))
+                              ]),
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    buildEditableTextField(
+                                        "name",
+                                        userData.name ?? '',
+                                        Icon(Icons.person,
+                                            color: Color(0xff9a3a51)),
+                                        false,
+                                        () => _editField('name'),
+                                        _isEditingEnabled),
+                                    const SizedBox(height: 15),
+                                    buildEditableTextField(
+                                        "email",
+                                        userData.email ?? '',
+                                        Icon(Icons.email,
+                                            color: Color(0xff1c69a2)),
+                                        false,
+                                        () => _editField('email'),
+                                        _isEditingEnabled),
+                                    const SizedBox(height: 15),
+                                    buildEditableTextField(
+                                        "password",
+                                        userData.password ?? '',
+                                        Icon(Icons.lock,
+                                            color: Color(0xff9a3a51)),
+                                        true,
+                                        () => _editField('password'),
+                                        _isEditingEnabled),
+                                    const SizedBox(height: 15),
+                                    buildEditableTextField(
+                                        "gender",
+                                        userData.gender ?? '',
+                                        Icon(Icons.male,
+                                            color: Color(0xff1c69a2)),
+                                        false,
+                                        () => _editField('gender'),
+                                        _isEditingEnabled),
+                                    const SizedBox(height: 15),
+                                    buildEditableTextField(
+                                        "country",
+                                        userData.country ?? '',
+                                        Icon(Icons.countertops,
+                                            color: Color(0xff9a3a51)),
+                                        false,
+                                        () => _editField('country'),
+                                        _isEditingEnabled),
+                                    const SizedBox(height: 15),
+                                  ],
+                                ),
+                              ),
+                              _isEditingEnabled
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        MYB(
+                                          text: "Cancel",
+                                          text_color:
+                                              Color.fromARGB(255, 210, 210, 205),
+                                          ontap: () {
+                                            setState(() {
+                                              _isEditingEnabled = false;
+                                            });
+                                          },
+                                          size: 150.0,
+                                        ),
+                                        MYB(
+                                          text: "Save",
+                                          text_color:
+                                              Color.fromARGB(255, 210, 210, 205),
+                                          ontap: () {
+                                            setState(() {
+                                              _isEditingEnabled = false;
+                                            });
+                                          },
+                                          size: 150.0,
+                                        ),
+                                      ],
+                                    )
+                                  : SizedBox(),
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          print("no");
+                          print(
+                              "Error while fetching user data: ${snapshot.error}");
+                          return Center(child: Text(snapshot.error.toString()));
+                        } else {
+                          print("noooo");
+                          return const Center(
+                              child: Text("Something went wrong"));
+                        }
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

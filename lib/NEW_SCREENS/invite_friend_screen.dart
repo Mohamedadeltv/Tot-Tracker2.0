@@ -1,7 +1,7 @@
-import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
-import '../custom_drawer/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
+import '../custom_drawer/app_theme.dart';
 
 class InviteFriend extends StatefulWidget {
   static const routeName = '/invitefriendscreen';
@@ -34,47 +34,49 @@ class _InviteFriendState extends State<InviteFriend> {
           child: Scaffold(
             backgroundColor:
                 isLightMode ? AppTheme.white : AppTheme.nearlyBlack,
-            body: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  width: 100,
-                  height: 100,
-                  child: Image.asset('assets/drawables/tottracker4.png'),
-                ),
-                Container(
-                  padding: EdgeInsets.only(
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Container(
+                    width: 100,
+                    height: 100,
+                    child: Image.asset('assets/drawables/tottracker4.png'),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
                       top: MediaQuery.of(context).padding.top,
                       left: 16,
-                      right: 16),
-                  child: Image.asset('assets/drawables/inviteImage.png'),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    'Invite Your Friends',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: isLightMode ? Colors.black : Colors.white,
+                      right: 16,
+                    ),
+                    child: Image.asset('assets/drawables/inviteImage.png'),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      'Invite Your Friends',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: isLightMode ? Colors.black : Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text(
-                    'Are you one of those who makes everything\n at the last moment?',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isLightMode ? Colors.black : Colors.white,
+                  Container(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text(
+                      'Are you one of those who makes everything\n at the last moment?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: isLightMode ? Colors.black : Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
+                  SizedBox(height: 16),
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () {
@@ -87,13 +89,15 @@ class _InviteFriendState extends State<InviteFriend> {
                           height: 40,
                           decoration: BoxDecoration(
                             color: isLightMode ? Colors.blue : Colors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(4.0)),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(4.0),
+                            ),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.grey.withOpacity(0.6),
-                                  offset: const Offset(4, 4),
-                                  blurRadius: 8.0),
+                                color: Colors.grey.withOpacity(0.6),
+                                offset: const Offset(4, 4),
+                                blurRadius: 8.0,
+                              ),
                             ],
                           ),
                           child: Material(
@@ -137,8 +141,9 @@ class _InviteFriendState extends State<InviteFriend> {
                       ),
                     ),
                   ),
-                )
-              ],
+                  SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ),

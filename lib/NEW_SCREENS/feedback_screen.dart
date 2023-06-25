@@ -12,10 +12,6 @@ class FeedbackScreen extends StatefulWidget {
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
   final TextEditingController _textEditingController = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<void> _sendFeedback(String feedback) async {
     try {
@@ -23,14 +19,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       final CollectionReference feedbackRef =
           FirebaseFirestore.instance.collection('Feedbacks');
 
-// Add the feedback to the "Feedbacks" collection
+      // Add the feedback to the "Feedbacks" collection
       final feedbackDocRef = await feedbackRef.add({
         'user email': user!.email,
         'feedback': feedback,
         'timestamp': FieldValue.serverTimestamp(),
       });
-
-// Get the user's document reference
+      // Get the user's document reference
       final userQuerySnapshot = await FirebaseFirestore.instance
           .collection('Users')
           .where('email', isEqualTo: user!.email)
@@ -39,15 +34,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       await userDoc.set({
         'feedbacks': FieldValue.arrayUnion([feedbackDocRef]),
       }, SetOptions(merge: true));
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Feedback sent successfully!'),
         duration: Duration(seconds: 2),
       ));
+
       Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FeaturesOverviewScreen(),
-          ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => FeaturesOverviewScreen(),
+        ),
+      );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Failed to send feedback!'),
@@ -67,57 +65,53 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         Navigator.of(context).pop();
         return false;
       },
-      child: Container(
-        color: isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
-        child: SafeArea(
-          top: false,
-          child: Scaffold(
-            backgroundColor:
-                isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
-            body: SingleChildScrollView(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Container(
-                      width: 100,
-                      height: 100,
-                      child: Image.asset('assets/drawables/tottracker4.png'),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).padding.top,
-                          left: 16,
-                          right: 16),
-                      child: Image.asset('assets/drawables/feedbackImage.png'),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        'Your FeedBack',
+      child: Scaffold(
+        backgroundColor:
+            isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
+        body: SafeArea(
+          child: ListView.builder(
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 50),
+                  child: Center(
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                        child: Image.asset(
+                          'assets/drawables/tottracker4.png',
+                        )),
+                  ),
+                );
+              } else {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: <Widget>[
+                      Image.asset('assets/drawables/feedbackImage.png'),
+                      SizedBox(height: 8),
+                      Text(
+                        'Your Feedback',
                         style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: isLightMode ? Colors.black : Colors.white),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: isLightMode ? Colors.black : Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Text(
+                      SizedBox(height: 16),
+                      Text(
                         'Give your best time for this moment.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 16,
-                            color: isLightMode ? Colors.black : Colors.white),
+                          fontSize: 16,
+                          color: isLightMode ? Colors.black : Colors.white,
+                        ),
                       ),
-                    ),
-                    _buildComposer(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Center(
+                      _buildComposer(),
+                      SizedBox(height: 16),
+                      Center(
                         child: Container(
                           width: 120,
                           height: 40,
@@ -127,9 +121,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                 const BorderRadius.all(Radius.circular(4.0)),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.grey.withOpacity(0.6),
-                                  offset: const Offset(4, 4),
-                                  blurRadius: 8.0),
+                                color: Colors.grey.withOpacity(0.6),
+                                offset: const Offset(4, 4),
+                                blurRadius: 8.0,
+                              ),
                             ],
                           ),
                           child: Material(
@@ -157,12 +152,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             ),
                           ),
                         ),
-                      ), 
-                    )
-                  ],
-                ),
-              ),
-            ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
           ),
         ),
       ),
@@ -192,7 +187,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             color: AppTheme.white,
             child: SingleChildScrollView(
               child: TextField(
-                controller: _textEditingController, // use class field here
+                controller: _textEditingController,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Enter your feedback...',
