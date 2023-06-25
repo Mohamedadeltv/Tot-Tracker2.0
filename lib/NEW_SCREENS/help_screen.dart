@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_WIDGETS/button.dart';
 import '../custom_drawer/app_theme.dart';
-import 'package:flutter/material.dart';
 
 class HelpScreen extends StatefulWidget {
   static const routeName = '/helpscreen';
@@ -34,50 +34,57 @@ class _HelpScreenState extends State<HelpScreen> {
           child: Scaffold(
             backgroundColor:
                 isLightMode ? AppTheme.nearlyWhite : AppTheme.nearlyBlack,
-            body: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  width: 100,
-                  height: 100,
-                  child: Image.asset('assets/drawables/tottracker4.png'),
-                ),
-                Container(
-                  padding: EdgeInsets.only(
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Container(
+                    width: 100,
+                    height: 100,
+                    child: Image.asset('assets/drawables/tottracker4.png'),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
                       top: MediaQuery.of(context).padding.top,
                       left: 16,
-                      right: 16),
-                  child: Image.asset('assets/drawables/helpImage.png'),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    'How can we help you?',
-                    style: TextStyle(
+                      right: 16,
+                    ),
+                    child: Image.asset('assets/drawables/helpImage.png'),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      'How can we help you?',
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: isLightMode ? Colors.black : Colors.white),
+                        color: isLightMode ? Colors.black : Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text(
-                    'It looks like you are experiencing problems\nwith our sign up process. We are here to\nhelp so please get in touch with us',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
+                  Container(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text(
+                      'It looks like you are experiencing problems\nwith our sign up process. We are here to\nhelp so please get in touch with us',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
                         fontSize: 16,
-                        color: isLightMode ? Colors.black : Colors.white),
+                        color: isLightMode ? Colors.black : Colors.white,
+                      ),
+                    ),
                   ),
-                ),SizedBox(height: 20.0,),
-                MYB(
-                  text: "Chat With US",
-                  size: 250.0,
-                  ontap: () {},
-                  text_color: Color.fromARGB(255, 210, 210, 205),
-                )
-              ],
+                  SizedBox(height: 20.0),
+                  MYB(
+                    text: "Chat With US",
+                    size: 250.0,
+                    ontap: () {},
+                    text_color: Color.fromARGB(255, 210, 210, 205),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ),
