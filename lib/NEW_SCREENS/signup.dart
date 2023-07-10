@@ -513,6 +513,7 @@ class _signupState extends State<signup> {
                           }
                         },
                         onSaved: (value) {
+                          pass = value.toString();
                           _authData['password'] = value.toString();
                         },
                       ),
@@ -556,6 +557,10 @@ class _signupState extends State<signup> {
                             configPass = 'Please Confirm Your Password!';
                             return '';
                           }
+                          if (controller.passwordController.text != value) {
+                            showErrorDialog('Passwords do not match!');
+                            return '';
+                          }
                           return null;
                         },
                       ),
@@ -595,6 +600,14 @@ class _signupState extends State<signup> {
                             controller.genderController.text = val!;
                             gender = val.toString();
                           });
+                        },
+                        validator: (value) {
+                          if (value == null || value == 'Enter Your Gender') {
+                            // Call your function here
+                            showErrorDialog('Please select your gender');
+                            return '';
+                          }
+                          return null;
                         },
                         items: [
                           DropdownMenuItem<String>(
@@ -648,6 +661,15 @@ class _signupState extends State<signup> {
                             ),
                             value: country,
                             isExpanded: true,
+                            validator: (value) {
+                              if (value == null ||
+                                  value == 'Enter Your Country') {
+                                // Call your function here
+                                showErrorDialog('Please select your Country');
+                                return '';
+                              }
+                              return null;
+                            },
                             onChanged: (val) {
                               controller.countryController.text = val!;
                               setState(() {

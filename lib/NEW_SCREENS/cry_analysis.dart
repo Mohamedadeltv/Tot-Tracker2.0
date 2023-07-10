@@ -1,9 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
+import '../api/sound_recorder.dart';
 import '../sleep_screen/const.dart';
 import '../sleep_screen/custom_clipper.dart';
 import 'package:tottracker/api/audio_player.dart';
+
+import '1.dart';
+
 class CryingAnalyzerApp extends StatefulWidget {
+  final SoundRecorder soundRecorderr;
+
+  const CryingAnalyzerApp({super.key, required this.soundRecorderr});
   @override
   _CryingAnalyzerAppState createState() => _CryingAnalyzerAppState();
 }
@@ -15,12 +22,14 @@ class _CryingAnalyzerAppState extends State<CryingAnalyzerApp> {
   void handleImagePressed() {
     Navigator.pop(context); // Navigate back to a specific widget
   }
+
   @override
   void initState() {
     super.initState();
 
+    
     // After 4 seconds, update the state to show the CryingReasonsWidget
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 4), () {
       setState(() {
         _showCryingReasons = true;
       });
@@ -31,12 +40,20 @@ class _CryingAnalyzerAppState extends State<CryingAnalyzerApp> {
     setState(() {
       _helpful = true;
     });
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => BeginningScreen()),
+  );
   }
 
   void handleDislikeButtonPressed() {
     setState(() {
       _helpful = false;
     });
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => BeginningScreen()),
+  );
   }
 
   @override
@@ -52,120 +69,166 @@ class _CryingAnalyzerAppState extends State<CryingAnalyzerApp> {
         _crossAxisCount;
     double _aspectRatio =
         _width / (_cellHeight + _mainAxisSpacing + (_crossAxisCount + 1));
+String? highestReason;
 
+    if (_showCryingReasons) {
+      String classProbabilitiesString = widget.soundRecorderr.classProbabilitiesString.replaceAll(' ', '');
+      List<String> probabilities = classProbabilitiesString.split(',');
+
+      Map<String, double> cryingReasons = {
+        'Burping': double.parse(probabilities[0]),
+        'Discomfort': double.parse(probabilities[1]),
+        'Hungry': double.parse(probabilities[2]),
+        'Pain': double.parse(probabilities[3]),
+        'Tired': double.parse(probabilities[4]),
+      };
+
+      double highestValue = double.negativeInfinity;
+
+      cryingReasons.forEach((reason, value) {
+        if (value > highestValue) {
+          highestValue = value;
+          highestReason = reason;
+        }
+      });
+    }
     return Scaffold(
       body: Center(
         child: Column(
           children: [
             Stack(
               children: <Widget>[
-                       Stack(children: <Widget>[
-          ClipPath(
-            clipper: MyCustomClipper(clipType: ClipType.bottom),
-            child: Container(
-              color: Constants.lightBlue,
-              height: Constants.headerHeight + statusBarHeight,
-            ),
-          ),
-          Positioned(
-            right: -45,
-            top: -30,
-            child: ClipOval(
-              child: Container(
-                color: Colors.black.withOpacity(0.05),
-                height: 220,
-                width: 220,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 40,
-            top: 50,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Status",
-                  style: TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  "Sleeping",
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w900,
-                      color: Constants.darkBlue),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            right: 20,
-            top: 40,
-            child: Container(
-              height: 120,
-              width: 120,
-              child:GestureDetector(
-                    onTap: handleImagePressed,
+                Stack(children: <Widget>[
+                  ClipPath(
+                    clipper: MyCustomClipper(clipType: ClipType.bottom),
+                    child: Container(
+                      color: Constants.lightBlue,
+                      height: Constants.headerHeight + statusBarHeight,
+                    ),
+                  ),
+                  Positioned(
+                    right: -45,
+                    top: -30,
+                    child: ClipOval(
+                      child: Container(
+                        color: Colors.black.withOpacity(0.05),
+                        height: 220,
+                        width: 220,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 40,
+                    top: 50,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Sound",
+                          style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Analyzing",
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w900,
+                              color: Constants.darkBlue),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    right: 20,
+                    top: 40,
                     child: Container(
                       height: 120,
                       width: 120,
-                      child: Image(
-                        image: AssetImage('assets/drawables/tottracker4.png'),
-                        height: 200,
-                        width: 200,
-                        color: Colors.white.withOpacity(1),
+                      child: GestureDetector(
+                        onTap: handleImagePressed,
+                        child: Container(
+                          height: 120,
+                          width: 120,
+                          child: Image(
+                            image:
+                                AssetImage('assets/drawables/tottracker4.png'),
+                            height: 200,
+                            width: 200,
+                            color: Colors.white.withOpacity(1),
+                          ),
+                        ),
                       ),
                     ),
-                  ),),
-          ),
-        ]),
+                  ),
+                ]),
               ],
             ),
             _showCryingReasons
                 ? Expanded(
                     child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          CryingReasonsWidget(),
+                          CryingReasonsWidget(soundRecorder: widget.soundRecorderr,),
                           SizedBox(height: 20.0),
-                          Text(
-                            'Was that helpful?',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
+
+                            Container(alignment: Alignment.center,
+                              child: Text(
+                              'The reason why the baby is crying is...... ',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontWeight: FontWeight.bold,
+                              ),
+                          ),
+                            ),
+                          Container(alignment: Alignment.center,
+                            child: Text(
+                              '${highestReason ?? 'No highest reason found'}',
+                              style: TextStyle(
+                                fontSize: 25.0,
+                                color: Color.fromARGB(255, 33, 58, 243),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                          SizedBox(height: 10.0),
+
+
+                          
+                          SizedBox(height: 30.0),
+                          Container(alignment: Alignment.center,
+                            child: Text(
+                              'Was this Helpful?',
+                              style: TextStyle(
+                                
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 25.0),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: [SizedBox(height: 15.0,),
                               ElevatedButton(
                                 onPressed: handleLikeButtonPressed,
-                                child: Text('Like'),
+                                child: Text('Yes'),
                               ),
                               SizedBox(width: 10.0),
                               ElevatedButton(
                                 onPressed: handleDislikeButtonPressed,
-                                child: Text('Dislike'),
+                                child: Text('No'),
                               ),
                             ],
                           ),
                           SizedBox(height: 20.0),
-                          Text(
-                            _helpful ? 'Thank you for your feedback!' : 'We appreciate your feedback.',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          
                         ],
                       ),
                     ),
@@ -177,26 +240,51 @@ class _CryingAnalyzerAppState extends State<CryingAnalyzerApp> {
     );
   }
 }
+
 class CryingReasonsWidget extends StatelessWidget {
+  final SoundRecorder soundRecorder;
+
+  const CryingReasonsWidget({super.key, required this.soundRecorder});
   @override
   Widget build(BuildContext context) {
-    // Replace this with your own crying reasons map
+    String classProbabilitiesString = soundRecorder.classProbabilitiesString.replaceAll(' ', '');
+
+     List<String> probabilities = classProbabilitiesString.split(',');
+
     Map<String, double> cryingReasons = {
-      'Hunger': 0.4,
-      'Pain': 0.3,
-      'Sleepiness': 0.2,
-      'Discomfort': 0.1,
+      'Burping': double.parse(probabilities[0]),
+      'Discomfort': double.parse(probabilities[1]),
+      'Hungry': double.parse(probabilities[2]),
+      'Pain': double.parse(probabilities[3]),
+      'Tired': double.parse(probabilities[4]),
     };
+String? highestReason;
+double highestValue = double.negativeInfinity;
+
+cryingReasons.forEach((reason, value) {
+  if (value > highestValue) {
+    highestValue = value;
+    highestReason = reason;
+  }
+});
+
+if (highestReason != null) {
+  print('Highest reason: $highestReason');
+} else {
+  print('No highest reason found');
+}
+
 
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color:Colors.grey,
+          color: Colors.grey,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Container(padding: EdgeInsets.all(5),
+      child: Container(
+        padding: EdgeInsets.all(2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -215,14 +303,14 @@ class CryingReasonsWidget extends StatelessWidget {
                   Expanded(
                     flex: 5,
                     child: LinearProgressIndicator(
-                      value: entry.value,
+                      value: entry.value/100.0,
                       backgroundColor: Colors.grey[300],
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                     ),
                   ),
                   Expanded(
-                    flex: 1,
-                    child: Text('${(entry.value * 100).toInt()}%'),
+                    flex: 0,
+                    child: Text('${(entry.value)}%'),
                   ),
                 ],
               ),

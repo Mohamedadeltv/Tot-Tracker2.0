@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import 'package:tottracker/NEW_WIDGETS/button.dart';
 import '../custom_drawer/app_theme.dart';
+import 'message.dart';
 
 class HelpScreen extends StatefulWidget {
   static const routeName = '/helpscreen';
@@ -52,7 +53,7 @@ class _HelpScreenState extends State<HelpScreen> {
                       right: 16,
                     ),
                     child: Image.asset('assets/drawables/helpImage.png'),
-                  ),
+                  ),BabyCryingStreamBuilder(),
                   Container(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:tottracker/NEW_SCREENS/braceletlist.dart';
@@ -22,18 +25,6 @@ class BeginningScreen extends StatefulWidget {
 class _BeginningScreenState extends State<BeginningScreen> {
   int _selectedIndex = 0;
 
-  final _navBarItems = [
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.home),
-      title: const Text("Home"),
-      selectedColor: Colors.purple,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.person),
-      title: const Text("Profile"),
-      selectedColor: Colors.teal,
-    ),
-  ];
   Widget? screenView;
   DrawerIndex? drawerIndex;
   late final List<Widget> _pages;
@@ -44,11 +35,81 @@ class _BeginningScreenState extends State<BeginningScreen> {
     ];
   }
 
+  StreamSubscription<DataSnapshot>? subscription;
+  String text1 = '';
+  String text2 = '';
+  final databaseReference = FirebaseDatabase.instance.reference();
+  final _navBarItems = [
+    SalomonBottomBarItem(
+      icon: const Icon(Icons.home ,weight: 20),
+      title: const Text(
+        "Home",
+        style: TextStyle(fontSize: 16),
+      ),
+      selectedColor: Colors.white,
+    ),
+    SalomonBottomBarItem(
+      icon: const Icon(Icons.child_friendly),
+      title: Container(),
+      selectedColor: Colors.white,
+    ),
+    SalomonBottomBarItem(
+      icon: const Icon(Icons.person,weight: 20,),
+      title: const Text(
+        "Profile",
+        style: TextStyle(fontSize: 16),
+      ),
+      selectedColor: Colors.white,
+    ),
+  ];
+  List<SalomonBottomBarItem> get updatedNavBarItems {
+    _navBarItems[1] = SalomonBottomBarItem(
+      icon: Image.asset(
+        'assets/drawables/tottracker4.png', // Replace with the path to your image
+        width: 30, // Adjust the width as needed
+        height: 30, // Adjust the height as needed
+      ),
+      title: Text(
+         '',
+        style: TextStyle(fontSize: 19),
+      ),
+      selectedColor:  Colors.white
+    );
+    return _navBarItems;
+  }
+
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
     screenView = const DashScreen();
     super.initState();
+    subscription = databaseReference!
+        .child("Vitals/1-setFloat")
+        .onValue
+        .map((event) => event.snapshot)
+        .listen((snapshot) {
+      if (snapshot != null) {
+        Map<dynamic, dynamic>? values =
+            snapshot.value as Map<dynamic, dynamic>?;
+
+        if (values != null) {
+          text1 = values["X"]?.toString() ?? '';
+          text2 = '${values["rt"]?.toString()}°C' ?? '';
+
+          if (text1 == '0') {
+            setState(() {});
+            // Perform any action you need when text1 is equal to '0'
+            // For example, print a message or update another variable
+          }
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subscription?.cancel();
   }
 
   void changeIndex(DrawerIndex drawerIndexdata) {
@@ -57,6 +118,7 @@ class _BeginningScreenState extends State<BeginningScreen> {
       switch (drawerIndex) {
         case DrawerIndex.HOME:
           setState(() {
+            _selectedIndex=0;
             screenView = const DashScreen();
           });
           break;
@@ -77,6 +139,7 @@ class _BeginningScreenState extends State<BeginningScreen> {
           break;
         case DrawerIndex.Profile:
           setState(() {
+            _selectedIndex=2;
             screenView = ProfileScreens();
           });
           break;
@@ -92,7 +155,7 @@ class _BeginningScreenState extends State<BeginningScreen> {
           break;
         case DrawerIndex.About:
           setState(() {
-            screenView = ProfileSelectionScreen();
+            screenView = AboutUsPage();
           });
           break;
         default:
@@ -135,21 +198,25 @@ class _BeginningScreenState extends State<BeginningScreen> {
               ),
               bottomNavigationBar: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color.fromARGB(255, 206, 204, 204),
-                    width: 1.0,
+                  border: Border.symmetric(
+                    horizontal: BorderSide.none,
                   ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: SalomonBottomBar(
+                  backgroundColor: Color.fromARGB(255, 48, 181, 238),
                   currentIndex: _selectedIndex,
-                  selectedItemColor: const Color(0xff6200ee),
-                  unselectedItemColor: const Color(0xff757575),
+                  selectedItemColor:  Color(0xff1c69a2),
+                  unselectedItemColor:  Color(0xff9a3a51),
                   onTap: (index) {
                     if (index == 0) {
                       setState(() {
                         screenView = const DashScreen();
                         changeIndex(DrawerIndex.HOME);
+                        _selectedIndex = index;
+                      });
+                    } else if (index == 1) {
+                      setState(() {
                         _selectedIndex = index;
                       });
                     } else {
@@ -160,7 +227,7 @@ class _BeginningScreenState extends State<BeginningScreen> {
                       });
                     }
                   },
-                  items: _navBarItems,
+                  items: updatedNavBarItems,
                 ),
               )),
         ),

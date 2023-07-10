@@ -1,9 +1,22 @@
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+admin.initializeApp();
 
-// // Create and deploy your first functions
-// // https://firebase.google.com/docs/functions/get-started
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+exports.sendPushNotification = functions.database
+    .ref("IMU_LSM6DS3/1-setFloat/X")
+    .onUpdate((change, context) => {
+      const xValue = change.after.val();
+
+      if (xValue === "1") {
+        const payload = {
+          notification: {
+            title: "X Value Update",
+            body: "The X value is now 1.",
+          },
+        };
+
+        return admin.messaging().sendToTopic("your_topic_name", payload);
+      }
+
+      return null;
+    });

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tottracker/NEW_SCREENS/features_overview_screen.dart';
 import '../custom_drawer/app_theme.dart';
+import 'message.dart';
 
 class InviteFriend extends StatefulWidget {
   static const routeName = '/invitefriendscreen';
@@ -141,7 +142,7 @@ class _InviteFriendState extends State<InviteFriend> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 16),BabyCryingStreamBuilder(),
                 ],
               ),
             ),

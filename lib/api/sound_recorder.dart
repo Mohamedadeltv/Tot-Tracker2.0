@@ -10,6 +10,9 @@ import 'package:http/http.dart' as http;
 import '../widgets/timer.dart';
 
 class SoundRecorder {
+  String _classProbabilitiesString = '';
+
+  String? responseData;
   FlutterSoundRecorder? _audioRecorder;
   bool _isRecordInitialized = false;
   bool get isRecording => _audioRecorder!.isRecording;
@@ -60,7 +63,7 @@ class SoundRecorder {
 
   Future<void> _stop() async {
     if (!_isRecordInitialized) return;
-    
+
     timerController.stopTimer();
     await _audioRecorder!.stopRecorder();
     final appDocumentsDirectory = await getApplicationDocumentsDirectory();
@@ -79,23 +82,37 @@ class SoundRecorder {
     final audioBase64 = base64Encode(audioBytes);
     print(audioBase64);
     // Send audioBase64 to Flask server
-    final ngrokUrl = 'https://a363-156-192-4-81.ngrok-free.app';
+    final ngrokUrl =
+        'https://56e7-45-242-77-68.ngrok-free.app';
     final apiUrl = '$ngrokUrl/api/predict';
 
     final response = await http.post(
       Uri.parse(apiUrl),
       body: {
         'audio': audioBase64,
-        'sample_rate': '430000', // Replace with the actual sample rate
+        'sample_rate': '22050', // Replace with the actual sample rate
       },
     );
     if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      final List<dynamic> classProbabilities =
+          jsonResponse['class_probabilities'];
+      final List probabilities = classProbabilities.map((value) {
+        return value.toStringAsFixed(2);
+      }).toList();
+
+      final classProbabilitiesString = probabilities.join(', ');
+
+      print(classProbabilitiesString);
+      _classProbabilitiesString = classProbabilitiesString;
+      responseData = response.body;
       print(response.body);
     } else {
       print('Error sending audio to Flask server');
     }
   }
 
+  String get classProbabilitiesString => _classProbabilitiesString;
   Future<void> toggleRecording() async {
     if (_audioRecorder!.isStopped) {
       await _record();

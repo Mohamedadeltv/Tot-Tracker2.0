@@ -124,6 +124,7 @@ class _BraceletFormState extends State<BraceletForm> {
                   return null;
                 },
                 onSaved: (value) {
+                  String? stringValue = value.toString();
                   _babyName = value!;
                 },
               ),
@@ -149,7 +150,7 @@ class _BraceletFormState extends State<BraceletForm> {
                   return null;
                 },
                 onSaved: (value) {
-                  _babyName = value!;
+                  String x = value!;
                 },
               ),
               SizedBox(height: 10),

@@ -11,6 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import 'message.dart';
+
 class ProfileScreens extends StatefulWidget {
   @override
   static const routeName = '/profile';
@@ -402,7 +404,7 @@ class ProfileScreensState extends State<ProfileScreens> {
                               Form(
                                 key: _formKey,
                                 child: Column(
-                                  children: [
+                                  children: [BabyCryingStreamBuilder(),
                                     const SizedBox(height: 20),
                                     buildEditableTextField(
                                         "name",

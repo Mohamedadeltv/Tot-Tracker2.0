@@ -5,7 +5,72 @@ import 'custom_clipper.dart';
 import 'grid_item.dart';
 import 'progress_vertical.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      showPopup(context);
+    });
+  }
+
+void showPopup(BuildContext context) {
+  showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        content: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                   Image.asset(
+        'assets/drawables/tottracker4.png', // Replace with the path to your image
+        width: 100, // Adjust the width as needed
+        height: 100, // Adjust the height as needed
+      ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'Feature unavailable in current version. Stay tuned for updates. Thank you for your understanding.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 8.0,
+              right: 8.0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: Icon(
+                  Icons.close_sharp,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [],
+      );
+    },
+  );
+}
+
+
+
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;

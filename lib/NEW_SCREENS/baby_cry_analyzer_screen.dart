@@ -62,7 +62,9 @@ class _BabyCryAnalyzerScreenState extends State<BabyCryAnalyzerScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CryingAnalyzerApp(),
+                    builder: (context) => CryingAnalyzerApp(
+                      soundRecorderr: recorder,
+                    ),
                   ),
                 );
               }

@@ -28,20 +28,21 @@ class DrawerUserController extends StatefulWidget {
 
 class _DrawerUserControllerState extends State<DrawerUserController>
     with TickerProviderStateMixin {
-  ScrollController? scrollController;
+ScrollController? scrollController;
   AnimationController? iconAnimationController;
   AnimationController? animationController;
+
 
   double scrolloffset = 0.0;
 
   @override
   void initState() {
-    animationController = AnimationController(
+animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
     iconAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 0));
-    iconAnimationController
-      ?..animateTo(1.0,
+    iconAnimationController!
+      ..animateTo(1.0,
           duration: const Duration(milliseconds: 0),
           curve: Curves.fastOutSlowIn);
     scrollController =
