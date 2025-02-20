@@ -87,7 +87,7 @@ class _timerClockState extends State<timerClock> {
   decoration: BoxDecoration(
     shape: BoxShape.circle,
     border: Border.all(
-      color: Colors.black,
+      color: Color.fromARGB(255, 87, 68, 68),
       width: 2.0,
     ),
   ),
@@ -95,9 +95,9 @@ class _timerClockState extends State<timerClock> {
   width: 300,
   height: 300,
   decoration: BoxDecoration(
-    color:Color.fromARGB(255, 15, 53, 143),
+    color:Color.fromARGB(255, 69, 182, 252),
     shape: BoxShape.circle,
-    border: Border.all(width: 10, color:isRunning? Colors.red:  Color.fromARGB(255, 255, 255, 255)),
+    border: Border.all(width: 10, color:isRunning? Color.fromARGB(255, 243, 90, 79):  Color.fromARGB(255, 255, 255, 255)),
   ),
   child: Column(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -108,7 +108,7 @@ class _timerClockState extends State<timerClock> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 60,color: Colors.white),
       ),
       Text( isRunning?
-        'Recording...':'Click On Me To Start\n           Recording',
+        'Recording...':'Click Here To Start\n       Recording',
         style: TextStyle(fontSize: 16,color: isRunning? Colors.red: Colors.white),
       ),
     ],

@@ -41,7 +41,7 @@ class _BeginningScreenState extends State<BeginningScreen> {
   final databaseReference = FirebaseDatabase.instance.reference();
   final _navBarItems = [
     SalomonBottomBarItem(
-      icon: const Icon(Icons.home ,weight: 20),
+      icon: const Icon(Icons.home, weight: 20),
       title: const Text(
         "Home",
         style: TextStyle(fontSize: 16),
@@ -54,7 +54,10 @@ class _BeginningScreenState extends State<BeginningScreen> {
       selectedColor: Colors.white,
     ),
     SalomonBottomBarItem(
-      icon: const Icon(Icons.person,weight: 20,),
+      icon: const Icon(
+        Icons.person,
+        weight: 20,
+      ),
       title: const Text(
         "Profile",
         style: TextStyle(fontSize: 16),
@@ -64,17 +67,16 @@ class _BeginningScreenState extends State<BeginningScreen> {
   ];
   List<SalomonBottomBarItem> get updatedNavBarItems {
     _navBarItems[1] = SalomonBottomBarItem(
-      icon: Image.asset(
-        'assets/drawables/tottracker4.png', // Replace with the path to your image
-        width: 30, // Adjust the width as needed
-        height: 30, // Adjust the height as needed
-      ),
-      title: Text(
-         '',
-        style: TextStyle(fontSize: 19),
-      ),
-      selectedColor:  Colors.white
-    );
+        icon: Image.asset(
+          'assets/drawables/tottracker4.png', // Replace with the path to your image
+          width: 30, // Adjust the width as needed
+          height: 30, // Adjust the height as needed
+        ),
+        title: Text(
+          text2,
+          style: TextStyle(fontSize: 19),
+        ),
+        selectedColor: Colors.white);
     return _navBarItems;
   }
 
@@ -94,7 +96,7 @@ class _BeginningScreenState extends State<BeginningScreen> {
 
         if (values != null) {
           text1 = values["X"]?.toString() ?? '';
-          text2 = '${values["rt"]?.toString()}°C' ?? '';
+          text2 = '${values["rt"]?.toString().substring(0, 4)}°C' ?? '';
 
           if (text1 == '0') {
             setState(() {});
@@ -118,43 +120,55 @@ class _BeginningScreenState extends State<BeginningScreen> {
       switch (drawerIndex) {
         case DrawerIndex.HOME:
           setState(() {
-            _selectedIndex=0;
+            _selectedIndex = 0;
             screenView = const DashScreen();
           });
           break;
         case DrawerIndex.Help:
           setState(() {
+            _selectedIndex = 1;
+
             screenView = HelpScreen();
           });
           break;
         case DrawerIndex.FeedBack:
           setState(() {
+            _selectedIndex = 1;
+
             screenView = FeedbackScreen();
           });
           break;
         case DrawerIndex.Invite:
           setState(() {
+            _selectedIndex = 1;
+
             screenView = InviteFriend();
           });
           break;
         case DrawerIndex.Profile:
           setState(() {
-            _selectedIndex=2;
+            _selectedIndex = 2;
             screenView = ProfileScreens();
           });
           break;
         case DrawerIndex.Invite:
           setState(() {
+            _selectedIndex = 1;
+
             screenView = InviteFriend();
           });
           break;
         case DrawerIndex.ManageBracelet:
           setState(() {
+            _selectedIndex = 1;
+
             screenView = ArrowWidget();
           });
           break;
         case DrawerIndex.About:
           setState(() {
+            _selectedIndex = 1;
+
             screenView = AboutUsPage();
           });
           break;
@@ -206,8 +220,8 @@ class _BeginningScreenState extends State<BeginningScreen> {
                 child: SalomonBottomBar(
                   backgroundColor: Color.fromARGB(255, 48, 181, 238),
                   currentIndex: _selectedIndex,
-                  selectedItemColor:  Color(0xff1c69a2),
-                  unselectedItemColor:  Color(0xff9a3a51),
+                  selectedItemColor: Color(0xff1c69a2),
+                  unselectedItemColor: Color(0xff9a3a51),
                   onTap: (index) {
                     if (index == 0) {
                       setState(() {

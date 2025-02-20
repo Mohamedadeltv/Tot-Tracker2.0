@@ -91,7 +91,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: <Widget>[
-                      Image.asset('assets/drawables/feedbackImage.png'),
+                      Container(width: 230,height: 230,child: Image.asset('assets/drawables/feedbackImage.png')),
                       SizedBox(height: 8),
                       Text(
                         'Your Feedback',

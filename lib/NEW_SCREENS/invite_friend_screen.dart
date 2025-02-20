@@ -46,7 +46,7 @@ class _InviteFriendState extends State<InviteFriend> {
                     height: 100,
                     child: Image.asset('assets/drawables/tottracker4.png'),
                   ),
-                  Container(
+                  Container(width: 280,height: 280,
                     padding: EdgeInsets.only(
                       top: MediaQuery.of(context).padding.top,
                       left: 16,

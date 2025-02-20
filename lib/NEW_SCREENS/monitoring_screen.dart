@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -439,64 +440,26 @@ class _DashScreenState extends State<DashScreen> {
                       GestureDetector(
                         key: UniqueKey(),
                         onTap: () {
-                          setState(() {
-                            color = !color;
+                          bool isReading = true;
+                          Timer.periodic(Duration(milliseconds: 15), (timer) {
+                            if (isReading) {
+                              setState(() {
+                                // Update the UI with the current value of "ht"
+                              });
+                            } else {
+                              timer.cancel();
+                            }
                           });
-                        },
-                        child: FutureBuilder<DatabaseEvent>(
-                          future: databaseReference!
+                          setState(() {});
+                          Timer(Duration(seconds: 15), () {
+                            isReading = false;
+                            databaseReference!
+                                .child("Vitals/1-setFloat")
+                                .update({"htf": 0});
+                          });
+                          databaseReference!
                               .child("Vitals/1-setFloat")
-                              .once(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<DatabaseEvent> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              // While waiting for data, show a loading indicator
-                              return RowCard(
-                                size: 160,
-                                Text1: 'Heart Rate',
-                                Text2: heartRate,
-                                color: Colors.red,
-                                icon: Icons.heart_broken,
-                              );
-                            }
-                            if (snapshot.hasError) {
-                              // Handle any potential errors
-                              return Text('Error: ${snapshot.error}');
-                            }
-                            if (snapshot.hasData) {
-                              DataSnapshot? dataSnapshot =
-                                  snapshot.data?.snapshot;
-
-                              if (dataSnapshot != null) {
-                                Map<dynamic, dynamic>? values = dataSnapshot
-                                    .value as Map<dynamic, dynamic>?;
-
-                                if (values != null) {
-                                  heartRate =
-                                      '${values["ht"]?.toString().substring(0, 2)}°bpm' ??
-                                          '';
-                                  text2 = values["Y"]?.toString() ?? '';
-
-                                  return RowCard(
-                                    size: 160,
-                                    Text1: 'Heart Rate',
-                                    Text2: heartRate,
-                                    color: Colors.red,
-                                    icon: Icons.heart_broken,
-                                  );
-                                }
-                              }
-                            }
-
-                            return Text(
-                                'No data found'); // Handle the case when there is no data
-                          },
-                        ),
-                      ),
-                      GestureDetector(
-                        key: UniqueKey(),
-                        onTap: () {
+                              .update({"htf": 1});
                           showModalBottomSheet(
                             context: context,
                             isDismissible: false,
@@ -547,11 +510,10 @@ class _DashScreenState extends State<DashScreen> {
                                               as Map<dynamic, dynamic>?;
 
                                       if (values != null) {
-                                        text1 = values["X"]?.toString() ?? '';
-                                        text2 = values["bt"]
-                                                ?.toString()
-                                                .substring(0, 4) ??
-                                            '';
+                                        text1 = values["htf"]?.toString() ?? '';
+                                        heartRate =
+                                            '${values["ht"]?.toString()?.substring(0, min(4, values["ht"].toString().length))}°bpm' ??
+                                                '';
 
                                         if (text1 == '0') {
                                           Navigator.pop(
@@ -592,22 +554,21 @@ class _DashScreenState extends State<DashScreen> {
                             },
                           );
                         },
-                        child: StreamBuilder<DataSnapshot>(
-                          stream: databaseReference!
+                        child: FutureBuilder<DatabaseEvent>(
+                          future: databaseReference!
                               .child("Vitals/1-setFloat")
-                              .onValue
-                              .map((event) => event.snapshot),
+                              .once(),
                           builder: (BuildContext context,
-                              AsyncSnapshot<DataSnapshot> snapshot) {
+                              AsyncSnapshot<DatabaseEvent> snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               // While waiting for data, show a loading indicator
                               return RowCard(
                                 size: 160,
-                                Text1: "Body Temp.",
-                                Text2: text2,
-                                color: Colors.blueAccent,
-                                icon: Icons.thermostat_auto,
+                                Text1: 'Heart Rate',
+                                Text2: heartRate,
+                                color: Colors.red,
+                                icon: Icons.heart_broken,
                               );
                             }
                             if (snapshot.hasError) {
@@ -615,26 +576,25 @@ class _DashScreenState extends State<DashScreen> {
                               return Text('Error: ${snapshot.error}');
                             }
                             if (snapshot.hasData) {
-                              DataSnapshot? dataSnapshot = snapshot.data;
+                              DataSnapshot? dataSnapshot =
+                                  snapshot.data?.snapshot;
 
                               if (dataSnapshot != null) {
                                 Map<dynamic, dynamic>? values = dataSnapshot
                                     .value as Map<dynamic, dynamic>?;
 
                                 if (values != null) {
-                                  text1 = values["c"]?.toString() ?? '';
-                                  text2 =
-                                      '${values["bt"]?.toString().substring(0, 4)}°C' ??
+                                  heartRate =
+                                      '${values["ht"]?.toString()?.substring(0, min(4, values["ht"].toString().length))}°bpm' ??
                                           '';
-                                  print(text1);
-                                  print(text2);
+                                  text2 = values["Y"]?.toString() ?? '';
 
                                   return RowCard(
                                     size: 160,
-                                    Text1: "Body Temp.",
-                                    Text2: text2,
-                                    color: Colors.blueAccent,
-                                    icon: Icons.thermostat_auto,
+                                    Text1: 'Heart Rate',
+                                    Text2: heartRate,
+                                    color: Colors.red,
+                                    icon: Icons.heart_broken,
                                   );
                                 }
                               }
@@ -645,6 +605,176 @@ class _DashScreenState extends State<DashScreen> {
                           },
                         ),
                       ),
+                      GestureDetector(
+                          key: UniqueKey(),
+                          onTap: () {
+                            bool isReading = true;
+                            Timer.periodic(Duration(milliseconds: 30), (timer) {
+                              if (isReading) {
+                                setState(() {
+                                  // Update the UI with the current value of "ht"
+                                });
+                              } else {
+                                timer.cancel();
+                              }
+                            });
+                            setState(() {});
+                            Timer(Duration(seconds: 30), () {
+                              isReading = false;
+                              databaseReference!
+                                  .child("Vitals/1-setFloat")
+                                  .update({"htf": 0});
+                            });
+                            databaseReference!
+                                .child("Vitals/1-setFloat")
+                                .update({"htf": 1});
+                            showModalBottomSheet(
+                              context: context,
+                              isDismissible: false,
+                              builder: (BuildContext context) {
+                                return StreamBuilder<DataSnapshot>(
+                                  stream: databaseReference!
+                                      .child("Vitals/1-setFloat")
+                                      .onValue
+                                      .map((event) => event.snapshot),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<DataSnapshot> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      // While waiting for data, show a loading indicator
+                                      return Container(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.child_care,
+                                              size: 80,
+                                              color: Colors.blue,
+                                            ),
+                                            SizedBox(height: 16.0),
+                                            Text(
+                                              'Place your baby\'s hand on the device.',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                    if (snapshot.hasError) {
+                                      // Handle any potential errors
+                                      return Text('Error: ${snapshot.error}');
+                                    }
+                                    if (snapshot.hasData) {
+                                      DataSnapshot? dataSnapshot =
+                                          snapshot.data;
+
+                                      if (dataSnapshot != null) {
+                                        Map<dynamic, dynamic>? values =
+                                            dataSnapshot.value
+                                                as Map<dynamic, dynamic>?;
+
+                                        if (values != null) {
+                                          text1 =
+                                              values["htf"]?.toString() ?? '';
+                                    text2 =
+                                        '${values["bt"]?.toString()?.substring(0, min(4, values["bt"].toString().length))}°C' ??
+                                            '';
+
+                                          if (text1 == '0') {
+                                            Navigator.pop(
+                                                context); // Close the bottom sheet
+                                            // databaseReference!.child("IMU_LSM6DS3/1-setFloat").child("X").set(1);
+                                          }
+
+                                          return Container(
+                                            padding: EdgeInsets.all(16.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  Icons.child_care,
+                                                  size: 80,
+                                                  color: Colors.blue,
+                                                ),
+                                                SizedBox(height: 16.0),
+                                                Text(
+                                                  'Place the device near ur baby\'s face.',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    }
+
+                                    return Text(
+                                        'No data found'); // Handle the case when there is no data
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          child: FutureBuilder<DatabaseEvent>(
+                            future: databaseReference!
+                                .child("Vitals/1-setFloat")
+                                .once(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<DatabaseEvent> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // While waiting for data, show a loading indicator
+                                return RowCard(
+                                  size: 160,
+                                  Text1: "Body Temp.",
+                                  Text2: text2,
+                                  color: Colors.blueAccent,
+                                  icon: Icons.thermostat_auto,
+                                );
+                              }
+                              if (snapshot.hasError) {
+                                // Handle any potential errors
+                                return Text('Error: ${snapshot.error}');
+                              }
+                              if (snapshot.hasData) {
+                                DataSnapshot? dataSnapshot =
+                                    snapshot.data?.snapshot;
+
+                                if (dataSnapshot != null) {
+                                  Map<dynamic, dynamic>? values = dataSnapshot
+                                      .value as Map<dynamic, dynamic>?;
+
+                                  if (values != null) {
+                                    text1 = values["c"]?.toString() ?? '';
+                                    text2 =
+                                        '${values["bt"]?.toString()?.substring(0, min(4, values["bt"].toString().length))}°C' ??
+                                            '';
+                                    print(text1);
+                                    print(text2);
+                                    return RowCard(
+                                      size: 160,
+                                      Text1: "Body Temp.",
+                                      Text2: text2,
+                                      color: Colors.blueAccent,
+                                      icon: Icons.thermostat_auto,
+                                    );
+                                  }
+                                }
+                              }
+
+                              return Text(
+                                  'No data found'); // Handle the case when there is no data
+                            },
+                          )),
                       GestureDetector(
                         key: UniqueKey(),
                         onTap: () {},
@@ -680,7 +810,7 @@ class _DashScreenState extends State<DashScreen> {
                                 if (values != null) {
                                   text1 = values["X"]?.toString() ?? '';
                                   room =
-                                      '${values["rt"]?.toString().substring(0, 4)}°C' ??
+                                      '${values["rt"]?.toString()?.substring(0, min(4, values["rt"].toString().length))}°C' ??
                                           '';
                                   print(text1);
                                   print(room);

@@ -128,32 +128,6 @@ class _BraceletFormState extends State<BraceletForm> {
                   _babyName = value!;
                 },
               ),
-              SizedBox(height: 20),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Baby Username',
-                  labelStyle: TextStyle(
-                    color: Color(0xff9a3a51),
-                    fontWeight: FontWeight.bold,
-                  ),
-                  border: OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff9a3a51),
-                    ),
-                  ),
-                ),
-                validator: (value) {
-                  if (value.toString().isEmpty) {
-                    return 'Please enter the baby name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  String x = value!;
-                },
-              ),
-              SizedBox(height: 10),
               Center(
                 child: MYB(
                   text: 'Add Bracelet',
@@ -162,9 +136,7 @@ class _BraceletFormState extends State<BraceletForm> {
                   size: 250.0,
                 ),
               ),
-              SizedBox(
-                height: 50,
-              ),
+
             ],
           ),
         ),

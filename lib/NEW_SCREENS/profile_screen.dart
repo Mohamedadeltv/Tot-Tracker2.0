@@ -85,6 +85,8 @@ class ProfileScreensState extends State<ProfileScreens> {
   Widget buildEditableTextField(String label, String text, Icon icon,
       bool isPassword, VoidCallback onEditPressed, bool isEditingEnabled) {
     bool hideIcon = label == "email";
+    bool hideIcon1 = label == "gender";
+    bool hideIcon2 = label == "country";
     bool isGender = label == "gender";
     String gender = text;
     return Row(
@@ -106,7 +108,12 @@ class ProfileScreensState extends State<ProfileScreens> {
                   ),
                 ),
               ),
-              if (isEditingEnabled && !hideIcon)
+              if (isEditingEnabled &&
+                  !hideIcon &&
+                  isEditingEnabled &&
+                  !hideIcon1 &&
+                  isEditingEnabled &&
+                  !hideIcon2)
                 IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () async {
@@ -117,56 +124,6 @@ class ProfileScreensState extends State<ProfileScreens> {
                         .get();
                     final docRef = querySnapshot.docs.first.reference;
                     if (isGender) {
-                      await showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            height: 200,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    'Select Gender',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  DropdownButton<String>(
-                                    value: gender,
-                                    items: [
-                                      DropdownMenuItem(
-                                        child: Text('Male'),
-                                        value: 'male',
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('Female'),
-                                        value: 'female',
-                                      ),
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        gender = value!;
-                                      });
-                                    },
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      await docRef.update({
-                                        label: gender,
-                                      });
-                                      setState(() {
-                                        text = gender;
-                                      });
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('Save'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
                     } else {
                       String newText = text;
                       await showDialog(
@@ -351,7 +308,8 @@ class ProfileScreensState extends State<ProfileScreens> {
                                       height: 35,
                                       width: 35,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                         color: Color(0xff9a3a51),
                                       ),
                                       child: PopupMenuButton(
@@ -394,7 +352,8 @@ class ProfileScreensState extends State<ProfileScreens> {
                                             value: FilterOptions.Favorites,
                                           ),
                                           PopupMenuItem(
-                                            child: Text('Remove Profile Picture'),
+                                            child:
+                                                Text('Remove Profile Picture'),
                                             value: FilterOptions.All,
                                           ),
                                         ],
@@ -404,7 +363,8 @@ class ProfileScreensState extends State<ProfileScreens> {
                               Form(
                                 key: _formKey,
                                 child: Column(
-                                  children: [BabyCryingStreamBuilder(),
+                                  children: [
+                                    BabyCryingStreamBuilder(),
                                     const SizedBox(height: 20),
                                     buildEditableTextField(
                                         "name",
@@ -447,7 +407,7 @@ class ProfileScreensState extends State<ProfileScreens> {
                                         userData.country ?? '',
                                         Icon(Icons.countertops,
                                             color: Color(0xff9a3a51)),
-                                        false,
+                                        true,
                                         () => _editField('country'),
                                         _isEditingEnabled),
                                     const SizedBox(height: 15),
@@ -458,29 +418,29 @@ class ProfileScreensState extends State<ProfileScreens> {
                                   ? Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      children: [
+                                      children: [SizedBox(width: 4,),
                                         MYB(
                                           text: "Cancel",
-                                          text_color:
-                                              Color.fromARGB(255, 210, 210, 205),
+                                          text_color: Color.fromARGB(
+                                              255, 210, 210, 205),
                                           ontap: () {
                                             setState(() {
                                               _isEditingEnabled = false;
                                             });
                                           },
-                                          size: 150.0,
+                                          size: 110.0,
                                         ),
                                         MYB(
                                           text: "Save",
-                                          text_color:
-                                              Color.fromARGB(255, 210, 210, 205),
+                                          text_color: Color.fromARGB(
+                                              255, 210, 210, 205),
                                           ontap: () {
                                             setState(() {
                                               _isEditingEnabled = false;
                                             });
                                           },
-                                          size: 150.0,
-                                        ),
+                                          size: 110.0,
+                                        ),SizedBox(width: 4,),
                                       ],
                                     )
                                   : SizedBox(),

@@ -21,7 +21,7 @@ class _BraceletsListState extends State<BraceletsList> {
     return Column(
       children: [
         SizedBox(
-          height: 20,
+          height: 5,
         ),
         Flexible(
           child: Container(

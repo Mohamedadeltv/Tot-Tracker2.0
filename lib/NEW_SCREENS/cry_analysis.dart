@@ -55,7 +55,37 @@ class _CryingAnalyzerAppState extends State<CryingAnalyzerApp> {
     MaterialPageRoute(builder: (context) => BeginningScreen()),
   );
   }
-
+void _showBottomSheet(BuildContext context) {
+    
+    showModalBottomSheet(
+      context: context,
+      isDismissible: true,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.child_care,
+                size: 80,
+                color: Colors.blue,
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Place your baby\'s hand on the device.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -137,7 +167,7 @@ String? highestReason;
                           style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.w900,
-                              color: Constants.darkBlue),
+                              color: Colors.white),
                         ),
                       ],
                     ),

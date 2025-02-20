@@ -83,7 +83,7 @@ class SoundRecorder {
     print(audioBase64);
     // Send audioBase64 to Flask server
     final ngrokUrl =
-        'https://56e7-45-242-77-68.ngrok-free.app';
+        'https://0c38-197-162-58-46.ngrok-free.app';
     final apiUrl = '$ngrokUrl/api/predict';
 
     final response = await http.post(

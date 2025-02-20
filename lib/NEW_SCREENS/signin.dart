@@ -197,6 +197,7 @@ class _signinState extends State<signin> {
                           color: Color.fromARGB(255, 212, 207, 207),
                         ),
                         child: TextFormField(
+                          obscureText: true,
                           textInputAction: TextInputAction.next,
                           cursorColor: Color(0xff9a3a51),
                           decoration: InputDecoration(

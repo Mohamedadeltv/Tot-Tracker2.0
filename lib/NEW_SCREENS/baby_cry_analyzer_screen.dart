@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tottracker/NEW_SCREENS/sky.dart';
 import 'package:tottracker/api/sound_recorder.dart';
 import 'package:tottracker/widgets/timer.dart';
+import '../sleep_screen/const.dart';
+import '../sleep_screen/custom_clipper.dart';
 import 'cry_analysis.dart';
 
 class BabyCryAnalyzerScreen extends StatefulWidget {
@@ -27,12 +29,64 @@ class _BabyCryAnalyzerScreenState extends State<BabyCryAnalyzerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double statusBarHeight = MediaQuery.of(context).padding.top;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Positioned.fill(
-            child: SkyWidget(),
+          ClipPath(
+            clipper: MyCustomClipper(clipType: ClipType.bottom),
+            child: Container(
+              color: Constants.lightBlue,
+              height: Constants.headerHeight + statusBarHeight,
+            ),
+          ),
+          Positioned(
+              left: 20,
+              top: 80,
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                  children: [
+                    TextSpan(
+                      text: 'Tot',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'Tracker',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+          Positioned(
+            right: -45,
+            top: -30,
+            child: ClipOval(
+              child: Container(
+                color: Colors.black.withOpacity(0.05),
+                height: 220,
+                width: 220,
+              ),
+            ),
+          ),
+          Positioned(
+            right: 20,
+            top: 50,
+            child: Container(
+                height: 120,
+                width: 120,
+                child: Image(
+                  image: AssetImage('assets/drawables/tottracker4.png'),
+                  height: 200,
+                  width: 200,
+                  color: Colors.white,
+                )),
           ),
           buildStart(),
         ],
@@ -49,7 +103,7 @@ class _BabyCryAnalyzerScreenState extends State<BabyCryAnalyzerScreen> {
     return Center(
       child: Column(
         children: [
-          SizedBox(height: 100),
+          SizedBox(height: 220),
           GestureDetector(
             onTap: () async {
               await recorder.toggleRecording();

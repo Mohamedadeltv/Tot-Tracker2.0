@@ -46,7 +46,7 @@ class _HelpScreenState extends State<HelpScreen> {
                     height: 100,
                     child: Image.asset('assets/drawables/tottracker4.png'),
                   ),
-                  Container(
+                  Container(width: 280,height: 280,
                     padding: EdgeInsets.only(
                       top: MediaQuery.of(context).padding.top,
                       left: 16,
@@ -79,7 +79,7 @@ class _HelpScreenState extends State<HelpScreen> {
                   SizedBox(height: 20.0),
                   MYB(
                     text: "Chat With US",
-                    size: 250.0,
+                    size: 220.0,
                     ontap: () {},
                     text_color: Color.fromARGB(255, 210, 210, 205),
                   ),
